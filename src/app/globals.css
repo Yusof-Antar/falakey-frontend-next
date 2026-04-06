@@ -1,0 +1,241 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+@plugin "tailwind-scrollbar-hide";
+
+@theme {
+  /* Colors */
+  --color-primary: #44175b;
+  --color-secondary: #f27c40;
+  --color-tertiary: #f4eff5;
+  --color-error: #c73e1d;
+  --color-custom-gray: #dddddd;
+  --color-custom-light-gray: #eeeeee;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  /* Fonts */
+  --font-emirates: "Emirates";
+  --font-franklin: "Franklin";
+
+  /* Sizing */
+  --width-size: 1350px;
+  --height-detailcard: calc(100vh - 70px - 10rem);
+
+  /* Border Radius */
+  --radius: 0.5rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Shadows */
+  --shadow-custom-bottom: 0px -4px 8px rgba(0, 0, 0, 0.5);
+
+  /* Breakpoints */
+  --breakpoint-size: 1350px;
+  --breakpoint-masonry: 851px;
+  --breakpoint-mlg: 900px;
+
+  /* Animations */
+  --animate-bounceOpacity: bounceOpacity 1s infinite ease;
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+
+  /* Keyframes */
+  @keyframes bounceOpacity {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    60% {
+      opacity: 0;
+    }
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+}
+
+/* CSS Variables (light/dark) */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+/* Fonts */
+@font-face {
+  font-family: "Emirates";
+  src: url("/font/Emirates-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Emirates";
+  src: url("/font/Emirates-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: bold;
+}
+@font-face {
+  font-family: "Franklin";
+  src: url("/font/FranklinRegular.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Base styles */
+@layer base {
+  * {
+    @apply font-emirates;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 90px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+/* Mapbox */
+mapbox-search-box {
+  width: 100%;
+}
+mapbox-search-box:focus-visible {
+  border: none !important;
+}
+.icon-map-box-search {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 2px;
+  right: 2px;
+  text-align: center;
+  fill: #333333;
+}
+
+/* Misc */
+.lazy-load-image-background {
+  width: 100%;
+}
+.css-6h9cc6-MuiInputBase-root-MuiInput-root::before {
+  border: none !important;
+}
+.css-6h9cc6-MuiInputBase-root-MuiInput-root::after {
+  border: none !important;
+}
+.css-6h9cc6-MuiInputBase-root-MuiInput-root {
+  color: rgb(75, 85, 99) !important;
+}
+.items-start {
+  align-items: flex-start;
+  -webkit-align-items: flex-start;
+}
+.text-rtl {
+  direction: rtl;
+  text-align: start;
+}
