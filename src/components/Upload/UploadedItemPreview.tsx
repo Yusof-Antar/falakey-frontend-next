@@ -33,7 +33,7 @@ const UploadedItemPreview = ({
 
   // const searchBoxCore = useSearchBoxCore({
   //   accessToken:
-  //     "pk.eyJ1IjoiZmFsYWtleSIsImEiOiJjbHhrc2J2ZzYwNGd3MmpxdTBpMDh0amdkIn0.k4lwuQTMngYvNp76lcIycA",
+  //     process.env.NEXT_PUBLIC_MAPBOX,
   // });
 
   const [contentType, setContentType] = useState<"free" | "premium" | "locked">(

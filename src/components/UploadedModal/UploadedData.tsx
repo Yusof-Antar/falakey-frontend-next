@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   faClose,
   faLocationDot,
@@ -39,17 +39,17 @@ const UploadedData = ({
       name?: string;
       long?: string;
       lat?: string;
-    }
+    },
   ) => void;
   handleTitleChange: (
     e: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    id: number,
   ) => void;
   handleTagsChanges: (id: number, tags: Tag[]) => void;
   handleCollectionsChanges: (id: number, tags: Collection[]) => void;
   handleDescriptionChange: (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-    id: number
+    id: number,
   ) => void;
   handlePremiumChange: (id: number, isPremium: boolean) => void;
 }) => {
@@ -62,8 +62,8 @@ const UploadedData = ({
     uploadedData.isPremium
       ? "premium"
       : uploadedData.isLocked
-      ? "locked"
-      : "free"
+        ? "locked"
+        : "free",
   );
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -75,8 +75,7 @@ const UploadedData = ({
   }, []);
 
   const searchBoxCore = useSearchBoxCore({
-    accessToken:
-      "pk.eyJ1IjoiZmFsYWtleSIsImEiOiJjbHhrc2J2ZzYwNGd3MmpxdTBpMDh0amdkIn0.k4lwuQTMngYvNp76lcIycA",
+    accessToken: process.env.NEXT_PUBLIC_MAPBOX,
   });
 
   const { t } = useTrans();
@@ -241,7 +240,7 @@ const UploadedData = ({
                       })
                       .then((result) => {
                         setLocationSelectedName(
-                          result["features"][0]["properties"]["name"]
+                          result["features"][0]["properties"]["name"],
                         );
                         setLocationSelected(true);
                         handleLocationChange(uploadedData.id, {
