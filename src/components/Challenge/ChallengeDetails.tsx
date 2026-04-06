@@ -1,5 +1,5 @@
 "use client";
-import { useNavigateWithLocale, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import WinnerCard from "./WinnerCard";
 import TagBadge from "./TagBadge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

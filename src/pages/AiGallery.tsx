@@ -35,13 +35,18 @@ interface ModalProps {
 
 const ConfigModal = ({ isOpen, onClose, children, title }: ModalProps) => {
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+    // FIX: Added check to ensure document exists (Build Safety)
+    if (typeof document !== "undefined") {
+      if (isOpen) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
     }
     return () => {
-      document.body.style.overflow = "";
+      if (typeof document !== "undefined") {
+        document.body.style.overflow = "";
+      }
     };
   }, [isOpen]);
 
@@ -50,8 +55,14 @@ const ConfigModal = ({ isOpen, onClose, children, title }: ModalProps) => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
-    if (isOpen) document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
+    if (isOpen && typeof document !== "undefined") {
+      document.addEventListener("keydown", handleKey);
+    }
+    return () => {
+      if (typeof document !== "undefined") {
+        document.removeEventListener("keydown", handleKey);
+      }
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -80,7 +91,6 @@ const ConfigModal = ({ isOpen, onClose, children, title }: ModalProps) => {
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 flex-shrink-0">
             <div className="flex items-center gap-3">
-              {/* Icon badge */}
               <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 via-[#ad3c6d] to-[#8c3279] shadow-md">
                 <FontAwesomeIcon
                   icon={faSlidersH}
@@ -111,10 +121,8 @@ const ConfigModal = ({ isOpen, onClose, children, title }: ModalProps) => {
             </button>
           </div>
 
-          {/* Scrollable content */}
           <div className="overflow-y-auto flex-1 px-6 py-5">{children}</div>
 
-          {/* Footer */}
           <div className="flex-shrink-0 px-6 py-4 border-t border-gray-100">
             <button
               onClick={onClose}
@@ -187,7 +195,6 @@ const ParamsContent = ({
 
   return (
     <div className="flex flex-col gap-5 text-gray-800">
-      {/* Model/Provider selector */}
       <div>
         <AIConfigDropDown
           label={t("ai.provider")}
@@ -200,7 +207,6 @@ const ParamsContent = ({
         />
       </div>
 
-      {/* Dynamic Parameters */}
       {currentParams.length > 0 && (
         <>
           <div className="h-px bg-gray-100" />
@@ -274,11 +280,7 @@ const AiGallery = () => {
   );
   const [searchInput, setSearchInput] = useState("");
   const [searchError, setSearchError] = useState<string | null>(null);
-
-  // Modal state (used for both mobile and desktop)
   const [showModal, setShowModal] = useState(false);
-
-  // AI Model state
   const [model, setModel] = useState<AIConfig | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedConfig, setSelectedConfig] = useState<{
@@ -289,7 +291,6 @@ const AiGallery = () => {
     {},
   );
 
-  // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchInput) {
@@ -299,7 +300,6 @@ const AiGallery = () => {
     return () => clearTimeout(timer);
   }, [searchInput, dispatch, previousSearch]);
 
-  // Fetch AI models
   useEffect(() => {
     if (token) {
       let isMounted = true;
@@ -339,7 +339,6 @@ const AiGallery = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setSearchInput(val);
-    // Clear error once user types enough
     if (val.length >= 20) setSearchError(null);
   };
 
@@ -390,18 +389,6 @@ const AiGallery = () => {
 
   const hasParams = token && currentParams.length > 0;
 
-  const paramsContentProps = {
-    loading,
-    model,
-    selectedConfig,
-    setSelectedConfig,
-    setParametersState,
-    parametersState,
-    currentParams,
-    handleParameterChange,
-    t,
-  };
-
   return (
     <>
       <SEO
@@ -412,25 +399,32 @@ const AiGallery = () => {
         image={banner}
       />
 
-      {/* ─── Unified Config Modal (mobile + desktop) ─── */}
       <ConfigModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         title={t("ai.settings_title") || "Generation Settings"}
       >
-        <ParamsContent {...paramsContentProps} />
+        <ParamsContent
+          loading={loading}
+          model={model}
+          selectedConfig={selectedConfig}
+          setSelectedConfig={setSelectedConfig}
+          setParametersState={setParametersState}
+          parametersState={parametersState}
+          currentParams={currentParams}
+          handleParameterChange={handleParameterChange}
+          t={t}
+        />
       </ConfigModal>
 
       <div className="pt-4 sm:pt-6 flex flex-col items-center">
         <div className="w-[95%] sm:max-w-screen-size flex flex-col gap-4 sm:gap-6">
-          {/* ─── Hero Banner ─── */}
           <div className="h-fit">
             <div
               className="w-full h-[380px] sm:h-[420px] md:h-[500px] bg-[#1a1659] rounded-2xl sm:rounded-[40px] relative flex flex-col justify-center items-center bg-no-repeat bg-cover bg-bottom px-4"
               style={{ backgroundImage: `url(${banner})` }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-[#1a1659]/80 via-transparent to-transparent rounded-2xl sm:rounded-[40px]" />
-
               <img
                 src={logo}
                 className="absolute left-4 sm:left-8 md:left-20 top-8 sm:top-12 md:top-16 w-32 sm:w-40 md:w-48 z-10"
@@ -442,20 +436,13 @@ const AiGallery = () => {
                   {t("ai.title")}
                 </h1>
 
-                {/* Search Card */}
                 <div className="w-[97%] sm:w-[92%] md:w-[82%] xl:w-[58%] flex flex-col gap-1.5 z-10">
-                  {/* Main Search Row */}
                   <div
-                    className={`
-                      flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0
-                      px-3 py-2.5 border backdrop-blur-md rounded-2xl
-                      transition-colors duration-200
-                      ${
-                        searchError
-                          ? "border-red-400/70 bg-red-500/10"
-                          : "border-white/40 bg-white/10"
-                      }
-                    `}
+                    className={`flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 px-3 py-2.5 border backdrop-blur-md rounded-2xl transition-colors duration-200 ${
+                      searchError
+                        ? "border-red-400/70 bg-red-500/10"
+                        : "border-white/40 bg-white/10"
+                    }`}
                   >
                     <input
                       type="text"
@@ -466,13 +453,11 @@ const AiGallery = () => {
                       className="w-full sm:flex-1 bg-transparent pe-2 text-white placeholder-gray-300 outline-none text-sm sm:text-base py-1"
                     />
                     <div className="flex gap-2 items-center">
-                      {/* Settings button — opens modal on both mobile & desktop */}
                       {hasParams && (
                         <button
                           type="button"
                           onClick={() => setShowModal(true)}
                           className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-white/30 bg-white/10 text-white text-xs font-medium hover:bg-white/20 transition-colors whitespace-nowrap"
-                          aria-label="Open settings"
                         >
                           <FontAwesomeIcon
                             icon={faSlidersH}
@@ -483,7 +468,6 @@ const AiGallery = () => {
                           </span>
                         </button>
                       )}
-
                       <button
                         onClick={handleGenerateClick}
                         className="flex gap-2 items-center justify-center px-5 py-2 bg-gradient-to-r rounded-xl from-amber-600 via-[#ad3c6d] to-[#8c3279] text-white text-sm font-semibold whitespace-nowrap shadow-lg hover:opacity-90 transition-opacity"
@@ -493,42 +477,16 @@ const AiGallery = () => {
                       </button>
                     </div>
                   </div>
-
-                  {/* Inline error message */}
                   {searchError && (
-                    <div className="flex items-center gap-1.5 px-1 animate-fadeIn">
-                      <svg
-                        className="size-3.5 text-red-300 flex-shrink-0"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <p className="text-red-300 text-xs font-medium">
-                        {searchError}
-                      </p>
+                    <div className="flex items-center gap-1.5 px-1 animate-fadeIn text-red-300 text-xs font-medium">
+                      {searchError}
                     </div>
                   )}
-
-                  {/* Character counter hint */}
-                  {searchInput.length > 0 &&
-                    searchInput.length < 20 &&
-                    !searchError && (
-                      <p className="text-white/50 text-xs px-1">
-                        {20 - searchInput.length} more character
-                        {20 - searchInput.length !== 1 ? "s" : ""} needed
-                      </p>
-                    )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* ─── Feature Section ─── */}
           <div className="flex flex-col items-center text-primary px-2 sm:px-0">
             <div className="mt-6 sm:mt-10 md:mt-14 mb-6 sm:mb-10 md:mb-14 text-center">
               <p className="text-sm sm:text-base md:text-lg text-secondary font-semibold tracking-widest uppercase mb-2">
@@ -565,14 +523,10 @@ const AiGallery = () => {
             </div>
           </div>
 
-          {/* ─── Masonry Section ─── */}
           <div className="w-full bg-white flex flex-col justify-center items-center">
             <div className="sm:max-w-screen-size w-[95%] flex flex-col sm:flex-row sm:justify-between justify-center items-center gap-4 sm:gap-0">
-              <div className="hidden sm:block" />
-              <div className="text-center sm:text-start my-6 sm:my-10 flex flex-col items-center sm:items-start justify-end gap-1 sm:gap-0.5">
-                <div className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl text-primary font-bold leading-tight">
-                  {t("ai.masonry_title")}
-                </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl text-primary font-bold leading-tight my-6 sm:my-10">
+                {t("ai.masonry_title")}
               </div>
               <div className="w-full sm:w-auto flex justify-center sm:justify-end">
                 <Select

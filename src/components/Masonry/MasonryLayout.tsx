@@ -1,7 +1,6 @@
-'use client';
-import { usePathname } from 'next/navigation';
+"use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Masonry from "react-responsive-masonry";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { toggleFavoritePost, useMasonryPostHook } from "@/helper/postHook";
@@ -11,6 +10,13 @@ import AuthenticationModal from "../Authentication/AuthenticationModal";
 import { useTrans } from "@/utils/translation";
 import InfiniteScroll from "react-infinite-scroll-component";
 import MasonryCard from "./MasonryCard";
+import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
+
+const Masonry = dynamic(
+  () => import("react-responsive-masonry").then((mod) => mod.default),
+  { ssr: false },
+);
 
 const MasonryLayout = ({
   title,
@@ -31,7 +37,7 @@ const MasonryLayout = ({
   selectedPost?: { slug: string; type: string };
   handleOpenCard: (s: string, t: string) => void;
 }) => {
-  const path = window.location.pathname;
+  const path = usePathname();
 
   const [openAuthModal, setOpenAuthModal] = useState(false);
 
@@ -49,6 +55,8 @@ const MasonryLayout = ({
     loading,
     more,
   } = useMasonryPostHook();
+
+
 
   const fetchData = async () => {
     if (isFetchingRef.current) return;
@@ -69,7 +77,7 @@ const MasonryLayout = ({
       if (selectedPost) {
         window.open(
           `/${local}/${selectedPost.type}/${selectedPost.slug}`,
-          "_self"
+          "_self",
         );
       }
     }
@@ -87,7 +95,7 @@ const MasonryLayout = ({
         return false;
       }
     },
-    [token, toggleFavoriteData]
+    [token, toggleFavoriteData],
   );
 
   const { t } = useTrans();
@@ -108,8 +116,8 @@ const MasonryLayout = ({
             {data.length > 0
               ? title
               : loading
-              ? ""
-              : "No Available Images or Videos"}
+                ? ""
+                : "No Available Images or Videos"}
           </div>
         )}
 
@@ -120,7 +128,7 @@ const MasonryLayout = ({
           loader={
             <div
               className={`mt-6 mb-60 flex items-center justify-center gap-3 text-xl font-semibold ${
-                /^\/(?:en|ar)\/challenge/.test(path)
+                /^\/(?:en|ar)\/challenge/.test(path!)
                   ? "text-white"
                   : "text-primary"
               }`}

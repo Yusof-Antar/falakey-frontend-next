@@ -13,16 +13,16 @@ import confetti from "canvas-confetti";
 import Swal from "sweetalert2";
 import { useTrans } from "@/utils/translation";
 import { Tag } from "@/models/tag";
-import { useNavigateWithLocale, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import AuthenticationModal from "@/components/Authentication/AuthenticationModal";
 import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
 
 const Upload: React.FC = () => {
   const navigate = useNavigateWithLocale();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const challenge = searchParams.get("challenge");
 
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const challengeSlug = location.state?.challengeSlug;
 
   const [uploads, setUploads] = useState<UploadParam[]>([]);
