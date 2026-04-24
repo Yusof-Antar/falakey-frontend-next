@@ -4,22 +4,12 @@ import {
   useNavigateWithLocale,
   useHomeHook,
 } from "@/helper/homeHook";
-// import { usePathname, useNavigateWithLocale, useNavigateWithLocale } from "@/helper/navigateWithLocale";
-import {
-  usePathname,
-  useNavigateWithLocale,
-  search,
-} from "@/lib/slices/searchSlice";
-import { usePathname, useNavigateWithLocale, RootState } from "@/lib/store";
-import { usePathname, useNavigateWithLocale, Tab, Tabs } from "@mui/material";
-import { usePathname, useNavigateWithLocale, useEffect } from "react";
-import {
-  usePathname,
-  useNavigateWithLocale,
-  useDispatch,
-  useSelector,
-} from "react-redux";
-import { usePathname, useNavigateWithLocale, useParams } from "next/navigation";
+import { search } from "@/lib/slices/searchSlice";
+import type { RootState } from "@/types/RootState";
+import { Tab, Tabs } from "@mui/material";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "next/navigation";
 
 const SearchTabs = ({ onChangeAddons }: { onChangeAddons?: () => void }) => {
   // const navigate = useNavigateWithLocale();

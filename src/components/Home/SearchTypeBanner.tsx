@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
 import { search } from "@/lib/slices/searchSlice";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { Type } from "@/models/type";
 import { useTrans } from "@/utils/translation";
 import { useDispatch, useSelector } from "react-redux";

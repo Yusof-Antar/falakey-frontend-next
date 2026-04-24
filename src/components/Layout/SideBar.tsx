@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MessageIcon from "@mui/icons-material/Message";
@@ -10,7 +10,7 @@ import SideBarLink from "./SideBarLink";
 import { usePathname } from "next/navigation";
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -24,8 +24,14 @@ const SideBar = () => {
     { label: t("sidebar.listings"), path: `/${local}/my-account/listings` },
     { label: t("sidebar.downloads"), path: `/${local}/my-account/downloads` },
     { label: t("sidebar.messages"), path: `/${local}/my-account/messages` },
-    { label: t("sidebar.notifications"), path: `/${local}/my-account/notification` },
-    { label: t("sidebar.account_details"), path: `/${local}/my-account/account-details` },
+    {
+      label: t("sidebar.notifications"),
+      path: `/${local}/my-account/notification`,
+    },
+    {
+      label: t("sidebar.account_details"),
+      path: `/${local}/my-account/account-details`,
+    },
   ];
 
   const handleNavigate = (path: string) => {
@@ -57,15 +63,32 @@ const SideBar = () => {
 
       <div
         className={`lg:hidden fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl z-50 transition-all duration-300 transform ${
-          mobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
+          mobileMenuOpen
+            ? "translate-y-0 opacity-100"
+            : "translate-y-full opacity-0 pointer-events-none"
         }`}
       >
         <div className="p-6 max-h-[80vh] overflow-y-auto">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-gray-900">{t("sidebar.menu")}</h3>
-            <button onClick={() => setMobileMenuOpen(false)} className="text-gray-500 hover:text-gray-700 transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <h3 className="text-xl font-bold text-gray-900">
+              {t("sidebar.menu")}
+            </h3>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -75,7 +98,9 @@ const SideBar = () => {
                 key={index}
                 onClick={() => handleNavigate(item.path)}
                 className={`w-full px-4 py-3 rounded-lg font-medium text-sm transition-all cursor-pointer ${
-                  pathname === item.path ? "bg-primary text-white shadow-md" : "bg-gray-50 text-gray-800 hover:bg-gray-100"
+                  pathname === item.path
+                    ? "bg-primary text-white shadow-md"
+                    : "bg-gray-50 text-gray-800 hover:bg-gray-100"
                 }`}
               >
                 {item.label}
@@ -83,7 +108,10 @@ const SideBar = () => {
             ))}
           </div>
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <div onClick={handleLogout} className="w-full px-4 py-3 rounded-lg font-medium text-sm bg-red-50 text-red-600 hover:bg-red-100 transition-all cursor-pointer">
+            <div
+              onClick={handleLogout}
+              className="w-full px-4 py-3 rounded-lg font-medium text-sm bg-red-50 text-red-600 hover:bg-red-100 transition-all cursor-pointer"
+            >
               {t("sidebar.logout")}
             </div>
           </div>
@@ -91,12 +119,36 @@ const SideBar = () => {
       </div>
 
       <div className="lg:flex hidden fixed left-0 top-[70px] bottom-0 w-[60px] bg-white flex-col items-center justify-start py-6 shadow-md gap-6 z-10">
-        <SideBarLink title={t("sidebar.dashboard")} route={`/${local}/my-account`} element={<DashboardIcon className="!text-[20px]" />} />
-        <SideBarLink title={t("sidebar.listings")} route={`/${local}/my-account/listings`} element={<LocationOnIcon className="!text-[20px]" />} />
-        <SideBarLink title={t("sidebar.downloads")} route={`/${local}/my-account/downloads`} element={<DownloadIcon className="!text-[20px]" />} />
-        <SideBarLink title={t("sidebar.messages")} route={`/${local}/my-account/messages`} element={<MessageIcon className="!text-[20px]" />} />
-        <SideBarLink title={t("sidebar.notifications")} route={`/${local}/my-account/notification`} element={<NotificationsIcon className="!text-[20px]" />} />
-        <SideBarLink title={t("sidebar.account_details")} route={`/${local}/my-account/account-details`} element={<i className="fa-solid fa-user !text-[15px]" />} />
+        <SideBarLink
+          title={t("sidebar.dashboard")}
+          route={`/${local}/my-account`}
+          element={<DashboardIcon className="!text-[20px]" />}
+        />
+        <SideBarLink
+          title={t("sidebar.listings")}
+          route={`/${local}/my-account/listings`}
+          element={<LocationOnIcon className="!text-[20px]" />}
+        />
+        <SideBarLink
+          title={t("sidebar.downloads")}
+          route={`/${local}/my-account/downloads`}
+          element={<DownloadIcon className="!text-[20px]" />}
+        />
+        <SideBarLink
+          title={t("sidebar.messages")}
+          route={`/${local}/my-account/messages`}
+          element={<MessageIcon className="!text-[20px]" />}
+        />
+        <SideBarLink
+          title={t("sidebar.notifications")}
+          route={`/${local}/my-account/notification`}
+          element={<NotificationsIcon className="!text-[20px]" />}
+        />
+        <SideBarLink
+          title={t("sidebar.account_details")}
+          route={`/${local}/my-account/account-details`}
+          element={<i className="fa-solid fa-user !text-[15px]" />}
+        />
         <div
           onMouseEnter={() => setHoverState(true)}
           onMouseLeave={() => setHoverState(false)}

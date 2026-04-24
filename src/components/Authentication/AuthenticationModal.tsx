@@ -8,7 +8,7 @@ import Login from "./Login";
 import Register from "../Home/Register";
 import { useSelector } from "react-redux";
 import { useAuthenticationHook } from "@/helper/authHook";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useTrans } from "@/utils/translation";

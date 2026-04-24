@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { Post } from "@/models/post";
 import axios from "axios";
 import { useState } from "react";
@@ -21,7 +21,7 @@ export const useDownloadHook = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data["success"]) {

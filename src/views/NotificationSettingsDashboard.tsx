@@ -1,5 +1,7 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+export const dynamic = "force-dynamic";
+
+import type { RootState } from "@/types/RootState";
 import { apiRequest } from "@/utils/apiRequest";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -49,7 +51,7 @@ const NotificationSettingsDashboard = () => {
     setSettings((prev) => {
       const updatedChannel =
         prev[channel]?.map((item) =>
-          item.key === key ? { ...item, enabled: item.enabled ? 0 : 1 } : item
+          item.key === key ? { ...item, enabled: item.enabled ? 0 : 1 } : item,
         ) || [];
       return { ...prev, [channel]: updatedChannel };
     });
@@ -66,7 +68,7 @@ const NotificationSettingsDashboard = () => {
           channel_key: channel,
           type_key: key,
           enabled: enabled,
-        }))
+        })),
       ),
     };
 

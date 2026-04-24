@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { Chat } from "@/models/Chat";
 import axios from "axios";
 import { useState } from "react";
@@ -23,7 +23,7 @@ export const useChatHook = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       if (response.data["success"]) {
         setChats(response.data["data"]["chats"]["list"]);

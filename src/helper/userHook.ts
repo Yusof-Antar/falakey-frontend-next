@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { User } from "@/models/user";
 import axios from "axios";
 import { useState } from "react";
@@ -17,13 +17,14 @@ export const useUserHook = () => {
 
     try {
       const response = await axios.get(
-        process.env.NEXT_PUBLIC_BASE_URL + `users/profile/private?locale=${local}`,
+        process.env.NEXT_PUBLIC_BASE_URL +
+          `users/profile/private?locale=${local}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
           },
-        }
+        },
       );
 
       if (response.data["success"]) {
@@ -42,7 +43,7 @@ export const useUserHook = () => {
     np?: string,
     cnp?: string,
     avatar?: File | null,
-    cover?: File | null
+    cover?: File | null,
   ) => {
     setLoading(true);
     const formData = new FormData();
@@ -59,7 +60,7 @@ export const useUserHook = () => {
 
     formData.append(
       "available_for_hire",
-      userData.available_for_hire ? "1" : "0"
+      userData.available_for_hire ? "1" : "0",
     );
     formData.append("bio", userData.bio! ?? "");
     formData.append("current_password", cp ?? "");
@@ -72,7 +73,7 @@ export const useUserHook = () => {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BASE_URL + `users/profile?locale=${local}`,
         formData,
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       if (response.data["success"]) {
@@ -87,5 +88,3 @@ export const useUserHook = () => {
 
   return { getUserData, updateUserData, user, loading };
 };
-
-

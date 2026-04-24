@@ -1,12 +1,14 @@
 "use client";
-import Link from "next/link";
+export const dynamic = "force-dynamic";
 
+import Link from "next/link";
+import dynamicComponent from "next/dynamic";
 import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 
-const PageNotFound = () => {
+const PageNotFoundContent = () => {
   const { local } = useSelector((state: RootState) => state.translation);
   const { t } = useTrans();
   return (
@@ -36,4 +38,7 @@ const PageNotFound = () => {
   );
 };
 
-export default PageNotFound;
+// Wrap with dynamic to disable SSR and prevent Redux context errors during build
+export default dynamicComponent(() => Promise.resolve(PageNotFoundContent), {
+  ssr: false,
+});

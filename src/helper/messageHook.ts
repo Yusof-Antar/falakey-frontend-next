@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { Message } from "@/models/Message";
 import axios from "axios";
 import { useState } from "react";
@@ -15,7 +15,7 @@ export const useMessageHook = () => {
 
   const getMessages = async (
     peerId: number | undefined,
-    postId: number | null
+    postId: number | null,
   ) => {
     setLoading(true);
     setError("");
@@ -30,7 +30,7 @@ export const useMessageHook = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       if (response.data["success"]) {
         setMessages(response.data["data"]);
@@ -45,7 +45,7 @@ export const useMessageHook = () => {
   const sendMessage = async (
     message: string,
     receiverId: number | undefined,
-    postId: number | undefined
+    postId: number | undefined,
   ) => {
     setError("");
     try {
@@ -69,7 +69,7 @@ export const useMessageHook = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
     } catch {
       setError("Error Happend While Sending the Message");

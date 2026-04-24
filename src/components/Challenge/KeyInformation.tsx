@@ -1,6 +1,6 @@
 "use client";
 import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { Challenge } from "@/models/challenge";
 import { getDaysLeftString } from "@/utils/getDaysLeftString";
 import { useTrans } from "@/utils/translation";

@@ -13,9 +13,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import AuthenticationModal from "../Authentication/AuthenticationModal";
 // import MenuIcon from "@mui/icons-material/Menu";
-import UploadModal from "../UploadModal";
+import dynamic from "next/dynamic";
+const UploadModal = dynamic(() => import("../UploadModal"), { ssr: false });
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import DashboardModal from "../DashboardModal";
 import ResponsiveMenuModal from "./ResponsiveMenuModal";
 import FavoritesModal from "../FavoritesModal";
@@ -73,7 +74,7 @@ const Navbar = () => {
       pathname.replace(/\/+$/, ""),
     );
     if (isHomePage) setSearchValue("");
-  }, [location]);
+  }, [pathname]);
 
   useEffect(() => {
     if (

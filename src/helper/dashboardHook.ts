@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { DashboardData } from "@/models/dashboard";
 import axios from "axios";
 import { useState } from "react";
@@ -21,7 +21,7 @@ export const useDashboardHook = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data["success"]) {

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { Type } from "@/models/type";
 import { useDispatch, useSelector } from "react-redux";
 import { search } from "@/lib/slices/searchSlice";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
 

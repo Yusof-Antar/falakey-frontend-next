@@ -1,8 +1,10 @@
-'use client';
+"use client";
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { usePlans } from "@/helper/plansHook";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 
 const Plans = () => {

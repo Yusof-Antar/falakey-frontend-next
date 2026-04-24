@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ReduxProvider from "@/components/Providers/ReduxProvider";
 
+// 1. Import these two
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
+// 2. Disable auto-injection
+config.autoAddCss = false;
+
 export const metadata: Metadata = {
   title: "Falakey | Arab Digital Creativity",
   description:

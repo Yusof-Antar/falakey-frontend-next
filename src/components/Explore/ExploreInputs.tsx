@@ -1,6 +1,6 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { search } from "@/lib/slices/searchSlice";
 import { useSearchParams } from "next/navigation";
 import { useFetchFilter } from "@/helper/filterHook";

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 import TagBadge from "./TagBadge";
 const starIcon = "/icons/star-icon.svg";
 import { Challenge } from "@/models/challenge";
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { getDaysLeftString } from "@/utils/getDaysLeftString";
 
 const ActiveChallengeCard = ({ challenge }: { challenge: Challenge }) => {

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { toggleFavoritePost, useMasonryPostHook } from "@/helper/postHook";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import AuthenticationModal from "../Authentication/AuthenticationModal";
 import { useTrans } from "@/utils/translation";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -55,8 +55,6 @@ const MasonryLayout = ({
     loading,
     more,
   } = useMasonryPostHook();
-
-
 
   const fetchData = async () => {
     if (isFetchingRef.current) return;

@@ -1,11 +1,13 @@
-'use client';
-import Image from 'next/image';
+"use client";
+export const dynamic = "force-dynamic";
+
+import Image from "next/image";
 
 import { apiRequest } from "@/utils/apiRequest";
 const star = "/star-icon.svg";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { AIConfig } from "@/models/Ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -449,9 +451,27 @@ const AiChat = () => {
       {/* ─── Desktop View ─── */}
       <div className="lg:flex hidden h-full bg-gradient-to-b from-primary to-[#7a3470]">
         <div className="bg-white/10 flex flex-col gap-10 px-7 py-6">
-          <Image src={starLogo} className="size-8" alt="" width={100} height={100} />
-          <Image src={videoGen} className="size-8" alt="" width={100} height={100} />
-          <Image src={VoiceGen} className="size-8" alt="" width={100} height={100} />
+          <Image
+            src={starLogo}
+            className="size-8"
+            alt=""
+            width={100}
+            height={100}
+          />
+          <Image
+            src={videoGen}
+            className="size-8"
+            alt=""
+            width={100}
+            height={100}
+          />
+          <Image
+            src={VoiceGen}
+            className="size-8"
+            alt=""
+            width={100}
+            height={100}
+          />
         </div>
         <div className="lg:h-full w-full flex lg:flex-row flex-col gap-6">
           {/* Sidebar */}
@@ -495,7 +515,13 @@ const AiChat = () => {
                   >
                     <div className="flex justify-between items-center flex-wrap gap-2">
                       <div className="text-lg font-semibold flex items-center gap-2">
-                        <Image src={star} className="size-[26px]" alt="star" width={100} height={100} />
+                        <Image
+                          src={star}
+                          className="size-[26px]"
+                          alt="star"
+                          width={100}
+                          height={100}
+                        />
                         <span>{r.prompt}</span>
                       </div>
                     </div>
@@ -556,7 +582,13 @@ const AiChat = () => {
                 ) : (
                   <>
                     {t("ai.generate")}
-                    <Image src={aiIcon} alt="" className="size-6" width={100} height={100} />
+                    <Image
+                      src={aiIcon}
+                      alt=""
+                      className="size-6"
+                      width={100}
+                      height={100}
+                    />
                   </>
                 )}
               </button>
@@ -571,9 +603,27 @@ const AiChat = () => {
       {/* ─── Mobile View ─── */}
       <div className="lg:hidden flex flex-col h-full bg-gradient-to-b from-primary to-[#7a3470]">
         <div className="bg-white/10 flex gap-10 px-7 py-5 h-fit justify-evenly w-full">
-          <Image src={starLogo} className="size-6" alt="" width={100} height={100} />
-          <Image src={videoGen} className="size-6" alt="" width={100} height={100} />
-          <Image src={VoiceGen} className="size-6" alt="" width={100} height={100} />
+          <Image
+            src={starLogo}
+            className="size-6"
+            alt=""
+            width={100}
+            height={100}
+          />
+          <Image
+            src={videoGen}
+            className="size-6"
+            alt=""
+            width={100}
+            height={100}
+          />
+          <Image
+            src={VoiceGen}
+            className="size-6"
+            alt=""
+            width={100}
+            height={100}
+          />
         </div>
 
         <div className="text-white m-3 flex-1 overflow-y-auto pb-32">
@@ -585,7 +635,13 @@ const AiChat = () => {
               >
                 <div className="flex justify-between items-center flex-wrap gap-2">
                   <div className="text-lg font-semibold flex items-center gap-2">
-                    <Image src={star} className="size-[26px]" alt="star" width={100} height={100} />
+                    <Image
+                      src={star}
+                      className="size-[26px]"
+                      alt="star"
+                      width={100}
+                      height={100}
+                    />
                     <span>{r.prompt}</span>
                   </div>
                 </div>
@@ -642,7 +698,13 @@ const AiChat = () => {
                   className="animate-spin size-4"
                 />
               ) : (
-                <Image src={aiIcon} alt="ai" className="size-7" width={100} height={100} />
+                <Image
+                  src={aiIcon}
+                  alt="ai"
+                  className="size-7"
+                  width={100}
+                  height={100}
+                />
               )}
             </button>
           </div>

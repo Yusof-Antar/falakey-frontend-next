@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
 import { usePathname } from "next/navigation";

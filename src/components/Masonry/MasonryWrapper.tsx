@@ -1,10 +1,10 @@
-'use client';
-import { usePathname } from 'next/navigation';
+"use client";
+import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import CardDetailModal from "../CardDetailModal";
 import MasonryLayout from "./MasonryLayout";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import useWindowSize from "@/helper/windowSizing";
 
 const MasonryWrapper = ({
@@ -46,14 +46,14 @@ const MasonryWrapper = ({
     window.history.pushState(
       { modalOpen: true },
       "",
-      `/${local}/${type}/${slug}`
+      `/${local}/${type}/${slug}`,
     );
     setModalDataSlug({ slug: slug, type: type });
   };
 
   // ✅ Close modal and go back to previous URL
   const closeModal = () => {
-  // const pathname = usePathname();
+    // const pathname = usePathname();
     if (previousURLRef.current) {
       window.history.back(); // This will trigger popstate and modal will close in there
     } else {

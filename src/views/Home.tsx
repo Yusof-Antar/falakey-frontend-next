@@ -1,4 +1,6 @@
-'use client';
+"use client";
+export const dynamic = "force-dynamic";
+
 import { useEffect, useRef, useState } from "react";
 
 import HomeBanner from "@/components/Home/HomeBanner";
@@ -9,7 +11,7 @@ import { useHomeHook } from "@/helper/homeHook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import MasonryWrapper from "@/components/Masonry/MasonryWrapper";
 import SEO from "@/components/Common/SEO";
@@ -62,7 +64,7 @@ const Home = () => {
         types: previousSearch!.types,
         placeholder: previousSearch.placeholder,
         sorting: selectedSort,
-      })
+      }),
     );
     getHomeData();
   }, [local]);

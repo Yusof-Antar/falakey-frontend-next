@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Author } from "@/models/author";
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { apiRequest } from "@/utils/apiRequest";
 import { useEffect, useState } from "react";
 

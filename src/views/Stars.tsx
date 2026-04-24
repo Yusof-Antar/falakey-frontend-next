@@ -1,11 +1,13 @@
-'use client';
+"use client";
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { useLeaderBoardHook } from "@/helper/leaderBoardHook";
 import LeaderBoardCard from "@/components/Favorites/LeaderBoardCard";
 import SEO from "@/components/Common/SEO";
 import { useTrans } from "@/utils/translation";
 
-export const Stars = () => {
+export default function Stars() {
   const [activeTab, setActiveTab] = useState<
     "content-added-last-30-days" | "all-time"
   >("content-added-last-30-days");
@@ -125,4 +127,4 @@ export const Stars = () => {
       </div>
     </>
   );
-};
+}

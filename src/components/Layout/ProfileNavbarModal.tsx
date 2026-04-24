@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/lib/slices/authSlice";
 import { useTrans } from "@/utils/translation";
 import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 
 const ProfileNavbarModal = ({
   openModal,

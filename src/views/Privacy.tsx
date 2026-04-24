@@ -1,4 +1,6 @@
-'use client';
+"use client";
+export const dynamic = "force-dynamic";
+
 import SEO from "@/components/Common/SEO";
 import { useTrans } from "@/utils/translation";
 

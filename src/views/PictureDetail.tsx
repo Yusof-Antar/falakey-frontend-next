@@ -9,7 +9,7 @@ import { toggleFavoritePost, useFetchPostDetail } from "@/helper/postHook";
 import PageNotFound from "./PageNotFound";
 import { ImageIcon } from "@radix-ui/react-icons";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import SEO from "@/components/Common/SEO";
 import { useTrans } from "@/utils/translation";
 import AuthenticationModal from "@/components/Authentication/AuthenticationModal";

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 import { useEffect } from "react";
 import ExploreInputs from "./ExploreInputs";
 import { useDispatch, useSelector } from "react-redux";
 import { search } from "@/lib/slices/searchSlice";
 import { useSearchParamsHook } from "@/helper/searchHook";
 import SEO from "../Common/SEO";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import MasonryWrapper from "../Masonry/MasonryWrapper";
 import { sortingExploreVar } from "@/utils/defaultVariables";
@@ -19,8 +19,6 @@ const Explore = () => {
   useEffect(() => {
     // Update the search state in Redux when necessary
     const searchParams = new URLSearchParams(searchParams.toString());
-
-    
 
     dispatch(
       search({
@@ -41,10 +39,8 @@ const Explore = () => {
             previousearchData.filter?.color ??
             null,
         },
-        sorting:
-          searchParams.get("sorting") ??
-          sortingExploreVar,
-      })
+        sorting: searchParams.get("sorting") ?? sortingExploreVar,
+      }),
     );
   }, [dispatch]);
 

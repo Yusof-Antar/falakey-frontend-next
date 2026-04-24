@@ -1,6 +1,6 @@
-'use client';
+"use client";
 import { useFavoriteHook } from "@/helper/postHook";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import { ImageIcon } from "@radix-ui/react-icons";
 import { useEffect } from "react";

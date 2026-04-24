@@ -1,9 +1,9 @@
-'use client';
+"use client";
 const unkownProfile = "/images/unkown-profile.png";
 import { Button } from "./ui/button";
 import { Author } from "@/models/author";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 
 const ProfileCard = ({

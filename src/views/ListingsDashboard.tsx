@@ -1,4 +1,6 @@
-'use client';
+"use client";
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState, useMemo } from "react";
 import ListingBox from "../components/ListingDashboard/ListingBox";
 import { useListingHook } from "@/helper/listingHook";
@@ -18,22 +20,22 @@ const ListingCardSkeleton = () => (
   <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
     <div className="relative">
       {/* Image skeleton with shimmer effect */}
-      <div className="w-full h-48 sm:h-56 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite] bg-[length:200%_100%]" />
+      <div className="w-full h-48 sm:h-56 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite] bg-size-[200%_100%]" />
     </div>
-    
+
     <div className="p-4 space-y-3">
       {/* Title skeleton */}
       <div className="space-y-2">
         <div className="h-5 bg-gray-200 rounded w-3/4 animate-pulse" />
         <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse" />
       </div>
-      
+
       {/* Details skeleton */}
       <div className="space-y-2 pt-2">
         <div className="h-3 bg-gray-200 rounded w-full animate-pulse" />
         <div className="h-3 bg-gray-200 rounded w-4/5 animate-pulse" />
       </div>
-      
+
       {/* Footer skeleton */}
       <div className="flex justify-between items-center pt-3 border-t border-gray-100">
         <div className="h-6 bg-gray-200 rounded-full w-20 animate-pulse" />
@@ -44,15 +46,34 @@ const ListingCardSkeleton = () => (
 );
 
 const ListingDashboard = () => {
-  const { getListingPosts, data, loading } = useListingHook();
+  const { getListingPosts, resetAndFetch, data, loading } = useListingHook();
   const { data: challenges, loading: challengeLoading } = useFetchChallenge();
+
+  const [displayData, setDisplayData] = useState<Post[]>([]);
+  const [filteredType, setFilteredType] = useState("");
+  const [filteredStatus, setFilteredStatus] = useState("");
 
   useEffect(() => {
     getListingPosts();
   }, []);
 
-  const [filteredType, setFilteredType] = useState("");
-  const [filteredStatus, setFilteredStatus] = useState("");
+  useEffect(() => {
+    setDisplayData(data ?? []);
+  }, [data]);
+
+  const handleStatusChanged = (postId: string | number, newStatus: string) => {
+    if (newStatus === "deleted") {
+      setDisplayData((prev) => prev.filter((p) => p.id !== postId));
+    } else {
+      setDisplayData((prev) =>
+        prev.map((p) =>
+          p.id === postId
+            ? { ...p, status: { ...p.status!, key: newStatus } }
+            : p,
+        ),
+      );
+    }
+  };
 
   // Helper function to capitalize first letter
   const capitalizeFirst = (str: string) => {
@@ -69,9 +90,9 @@ const ListingDashboard = () => {
 
   // Extract unique types from data
   const availableTypes = useMemo(() => {
-    if (!data || data.length === 0) return [];
+    if (!displayData || displayData.length === 0) return [];
 
-    const types = data
+    const types = displayData
       .map((listing: Post) => listing.type)
       .filter((type): type is string => !!type);
 
@@ -80,9 +101,9 @@ const ListingDashboard = () => {
 
   // Extract unique statuses from data
   const availableStatuses = useMemo(() => {
-    if (!data || data.length === 0) return [];
+    if (!displayData || displayData.length === 0) return [];
 
-    const statuses = data
+    const statuses = displayData
       .map((listing: Post) => listing.status)
       .filter((status): status is { key: string; color: string } => !!status);
 
@@ -93,7 +114,7 @@ const ListingDashboard = () => {
     return uniqueStatuses;
   }, [data]);
 
-  const filteredListings = (data ?? []).filter((listing: Post) => {
+  const filteredListings = displayData.filter((listing: Post) => {
     const typeMatch = filteredType ? listing!.type! === filteredType : true;
     const statusMatch = filteredStatus
       ? listing.status?.key === filteredStatus
@@ -179,7 +200,7 @@ const ListingDashboard = () => {
                     {t("listing_dashboard.clear")}
                   </button>
                   <button
-                    onClick={() => {}}
+                    onClick={() => resetAndFetch({ type: filteredType || undefined, status: filteredStatus || undefined })}
                     className="flex-1 bg-[#44175B] text-white text-sm sm:text-base font-semibold font-lexend rounded-lg px-3 sm:px-4 hover:bg-[#5a1e75] active:bg-[#331056] transition-all duration-150 shadow-sm hover:shadow"
                   >
                     {t("listing_dashboard.filter")}
@@ -211,7 +232,8 @@ const ListingDashboard = () => {
                 {filteredStatus && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-[#44175B]/10 text-[#44175B] rounded-full text-xs sm:text-sm font-medium transition-all hover:bg-[#44175B]/20">
                     <span className="font-lexend">
-                      {t("listing_dashboard.status")}: {formatLabel(filteredStatus)}
+                      {t("listing_dashboard.status")}:{" "}
+                      {formatLabel(filteredStatus)}
                     </span>
                     <button
                       onClick={() => setFilteredStatus("")}
@@ -243,6 +265,7 @@ const ListingDashboard = () => {
               data={data}
               challenges={challenges?.active ?? []}
               challengeLoading={challengeLoading}
+              onStatusChanged={handleStatusChanged}
             />
           ))}
         </div>
@@ -283,8 +306,6 @@ const ListingDashboard = () => {
           </div>
         </div>
       )}
-
-      
     </div>
   );
 };

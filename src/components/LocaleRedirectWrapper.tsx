@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { usePathname, useNavigateWithLocale } from "next/navigation";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import type { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 
 const SUPPORTED_LOCALES = ["en", "ar"];
 

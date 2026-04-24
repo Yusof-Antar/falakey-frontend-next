@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { Collection } from "@/models/collection";
 import { Tag } from "@/models/tag";
 import { UploadParam } from "@/models/uploadParam";
@@ -55,7 +55,7 @@ export const useUploadHook = () => {
           headers: {
             Accept: "application/json",
           },
-        }
+        },
       );
 
       if (response.data["success"]) {
@@ -83,7 +83,7 @@ export const useUploadHook = () => {
           headers: {
             Accept: "application/json",
           },
-        }
+        },
       );
 
       if (response.data["success"]) {
@@ -110,7 +110,7 @@ export const useUploadHook = () => {
 
   const uploadPosts = async (
     uploadedData: UploadParam[],
-    filtering?: { key: string; value: string }[]
+    filtering?: { key: string; value: string }[],
   ) => {
     setSuccessUpload({
       success: false,
@@ -128,59 +128,59 @@ export const useUploadHook = () => {
         formData.append(`items[${index}][title]`, element.title ?? "");
         formData.append(
           `items[${index}][is_download_locked]`,
-          String(element.isLocked ?? false)
+          String(element.isLocked ?? false),
         );
         formData.append(
           `items[${index}][is_premium]`,
-          String(element.isPremium ?? false)
+          String(element.isPremium ?? false),
         );
         formData.append(
           `items[${index}][location]`,
-          element.location ? element.location.name ?? "" : ""
+          element.location ? (element.location.name ?? "") : "",
         );
 
         formData.append(
           `items[${index}][location_lat]`,
-          element.location ? element.location.lat ?? "" : ""
+          element.location ? (element.location.lat ?? "") : "",
         );
         formData.append(
           `items[${index}][location_lng]`,
-          element.location ? element.location.long ?? "" : ""
+          element.location ? (element.location.long ?? "") : "",
         );
 
         element.tags?.map((tag, tagIndex) => {
           formData.append(
             `items[${index}][tags][${tagIndex}]`,
-            tag.id.toString()
+            tag.id.toString(),
           );
         });
 
         element.collections?.map((tag, collectionIndex) => {
           formData.append(
             `items[${index}][collections][${collectionIndex}]`,
-            tag.id.toString()
+            tag.id.toString(),
           );
         });
         formData.append(
           `items[${index}][description]`,
-          element.description ?? ""
+          element.description ?? "",
         );
         formData.append(
           `items[${index}][media_path]`,
-          element.img?.tempPath ?? ""
+          element.img?.tempPath ?? "",
         );
         formData.append(
           `items[${index}][height]`,
-          element.img?.height?.toString() ?? ""
+          element.img?.height?.toString() ?? "",
         );
         formData.append(
           `items[${index}][width]`,
-          element.img?.width?.toString() ?? ""
+          element.img?.width?.toString() ?? "",
         );
         if (element.img?.thumbnail)
           formData.append(
             `items[${index}][thumbnail]`,
-            element.img?.thumbnail ?? ""
+            element.img?.thumbnail ?? "",
           );
       }
 
@@ -192,7 +192,7 @@ export const useUploadHook = () => {
             Authorization: `Bearer ${token}`,
             // Accept: "application/json",
           },
-        }
+        },
       );
 
       if (response.data["success"]) {

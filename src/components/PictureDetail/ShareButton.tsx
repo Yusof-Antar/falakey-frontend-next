@@ -1,7 +1,7 @@
-'use client';
+"use client";
 import share_post from "@/helper/shareFunction";
 import { socialMdeiaShare } from "@/lib/data";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { Post } from "@/models/post";
 import { useTrans } from "@/utils/translation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -56,7 +56,7 @@ const ShareButton = ({ post }: { post: Post }) => {
                         | "twitter"
                         | "email"
                         | "whatsapp",
-                      `window.location.origin/${local}/${post.type}/${post.slug}`
+                      `window.location.origin/${local}/${post.type}/${post.slug}`,
                     );
                   }}
                 >

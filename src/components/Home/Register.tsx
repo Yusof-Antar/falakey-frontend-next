@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Input } from "@mui/material";
 const googleIcon = "/icons/google-icon.svg";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import { faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 
 const Register = ({
   loading,
@@ -23,7 +23,7 @@ const Register = ({
     l: string,
     p: string,
     pc: string,
-    t: boolean
+    t: boolean,
   ) => void;
   message: string;
   error: string;
@@ -233,7 +233,7 @@ const Register = ({
                 lastName,
                 password,
                 passwordConfirmation,
-                checked
+                checked,
               );
             }}
             type="submit"

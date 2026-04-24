@@ -1,10 +1,12 @@
 "use client";
+export const dynamic = "force-dynamic";
+
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { UploadParam } from "@/models/uploadParam";
 import { getFileTemp } from "@/helper/postHook";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import UploadDefaultContainer from "@/components/Upload/UploadDefaultContainer";
 import UploadedItemsContainer from "@/components/Upload/UploadedItemsContainer";
 import { ProgressCircle } from "@/components/ui/ProgressCircle";
@@ -22,8 +24,7 @@ const Upload: React.FC = () => {
   const searchParams = useSearchParams();
   const challenge = searchParams.get("challenge");
 
-  // const pathname = usePathname();
-  const challengeSlug = location.state?.challengeSlug;
+  const challengeSlug = searchParams.get("challengeSlug");
 
   const [uploads, setUploads] = useState<UploadParam[]>([]);
   const [isDragging, setIsDragging] = useState(false);

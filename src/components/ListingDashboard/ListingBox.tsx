@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Post } from "@/models/post";
 import { useTrans } from "@/utils/translation";
 import ImageIcon from "@mui/icons-material/Image";
@@ -10,61 +10,136 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import WarningIcon from "@mui/icons-material/Warning";
+import BlockIcon from "@mui/icons-material/Block";
 import { useState } from "react";
 import { Challenge } from "@/models/challenge";
 import { getDaysLeftString } from "@/utils/getDaysLeftString";
+import { apiRequest } from "@/utils/apiRequest";
+import type { RootState } from "@/types/RootState";
+import { useSelector } from "react-redux";
 
 const ListingBox = ({
   data,
   challenges,
   challengeLoading,
+  onStatusChanged,
 }: {
   data: Post;
   challenges: Challenge[];
   challengeLoading: boolean;
+  onStatusChanged?: (postId: string | number, newStatus: string) => void;
 }) => {
   const { t } = useTrans();
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const [showActions, setShowActions] = useState(false);
   const [showChallengeModal, setShowChallengeModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
-  // Check if post is approved
-  const isApproved = data?.status?.key?.toLowerCase() === "published";
+  const [challengeSubmitting, setChallengeSubmitting] = useState(false);
+  const [challengeError, setChallengeError] = useState<string | null>(null);
+
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const statusKey = data?.status?.key?.toLowerCase();
+  const isApproved = statusKey === "published";
+  const isPending = statusKey === "pending";
 
   const handleAddToChallenge = () => {
     setShowActions(false);
+    setChallengeError(null);
     setShowChallengeModal(true);
+  };
+
+  const handleCancelClick = () => {
+    setShowActions(false);
+    setCancelError(null);
+    setShowCancelModal(true);
   };
 
   const handleDeleteClick = () => {
     setShowActions(false);
+    setDeleteError(null);
     setShowDeleteModal(true);
   };
 
-  const handleConfirmDelete = () => {
-    // Add your delete logic here
-    console.log("Deleting post:", data.id);
-    setShowDeleteModal(false);
+  const handleConfirmDelete = async () => {
+    setDeleteLoading(true);
+    setDeleteError(null);
+
+    const result = await apiRequest({
+      method: "delete",
+      url: `posts/${data.id}`,
+      token: token!,
+      showError: false,
+    });
+
+    setDeleteLoading(false);
+
+    if (result.success) {
+      setShowDeleteModal(false);
+      onStatusChanged?.(data.id, "deleted");
+    } else {
+      setDeleteError(result.error ?? t("listing.something_went_wrong"));
+    }
   };
 
-  const handleSelectChallenge = (challenge: Challenge) => {
-    // Add your logic here to add post to challenge
-    console.log("Adding post to challenge:", {
-      postId: data.id,
-      challengeId: challenge.id,
+  const handleConfirmCancel = async () => {
+    setCancelLoading(true);
+    setCancelError(null);
+
+    const result = await apiRequest({
+      method: "put",
+      url: `posts/update-status/${data.id}`,
+      data: { status: "canceled" },
+      token: token!,
+      showError: false,
     });
-    setShowChallengeModal(false);
+
+    setCancelLoading(false);
+
+    if (result.success) {
+      setShowCancelModal(false);
+      onStatusChanged?.(data.id, "canceled");
+    } else {
+      setCancelError(result.error ?? t("listing.something_went_wrong"));
+    }
+  };
+
+  const handleSelectChallenge = async (challenge: Challenge) => {
+    setChallengeSubmitting(true);
+    setChallengeError(null);
+
+    const result = await apiRequest({
+      method: "put",
+      url: `posts/update-challenge/${data.id}`,
+      data: { challenge_id: challenge.id },
+      token: token!,
+      showError: false,
+    });
+
+    setChallengeSubmitting(false);
+
+    if (result.success) {
+      setShowChallengeModal(false);
+    } else {
+      setChallengeError(result.error ?? t("listing.something_went_wrong"));
+    }
   };
 
   return (
     <>
       <div className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
-        {/* Header with Image and Title */}
         <div className="relative">
           <div className="p-4 pb-3">
             <div className="flex items-start gap-3">
               {/* Thumbnail */}
-              <div className="w-16 h-16 flex-shrink-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center rounded-lg overflow-hidden">
+              <div className="w-16 h-16 shrink-0 bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center rounded-lg overflow-hidden">
                 {data?.type === "video" ? (
                   <video
                     className="w-full h-full object-cover"
@@ -81,13 +156,11 @@ const ListingBox = ({
                 )}
               </div>
 
-              {/* Title and Actions */}
+              {/* Title and Status */}
               <div className="flex-1 min-w-0">
                 <h2 className="text-base font-semibold font-lexend text-gray-900 line-clamp-2 mb-2">
                   {data?.title}
                 </h2>
-
-                {/* Status Badge */}
                 <div
                   className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white"
                   style={{ backgroundColor: data?.status?.color }}
@@ -99,6 +172,7 @@ const ListingBox = ({
                 </div>
               </div>
 
+              {/* Actions Menu */}
               <div className="relative">
                 <button
                   onClick={() => setShowActions(!showActions)}
@@ -107,14 +181,13 @@ const ListingBox = ({
                   <MoreVertIcon className="text-gray-600" fontSize="small" />
                 </button>
 
-                {/* Dropdown Menu */}
                 {showActions && (
                   <>
                     <div
-                      className="fixed  inset-0 z-10"
+                      className="fixed inset-0 z-10"
                       onClick={() => setShowActions(false)}
                     />
-                    <div className="absolute end-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                    <div className="absolute end-0 mt-1 w-52 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
                       {isApproved && (
                         <button
                           onClick={handleAddToChallenge}
@@ -125,6 +198,18 @@ const ListingBox = ({
                             className="text-gray-500"
                           />
                           {t("listing.add_to_challenge")}
+                        </button>
+                      )}
+                      {isPending && (
+                        <button
+                          onClick={handleCancelClick}
+                          className="w-full px-4 py-2 text-left text-sm text-orange-600 hover:bg-orange-50 flex items-center gap-2 transition-colors"
+                        >
+                          <BlockIcon
+                            fontSize="small"
+                            className="text-orange-500"
+                          />
+                          {t("listing.cancel_post")}
                         </button>
                       )}
                       <button
@@ -142,10 +227,9 @@ const ListingBox = ({
           </div>
         </div>
 
-        {/* Stats Section */}
+        {/* Stats */}
         <div className="px-4 pb-4">
           <div className="grid grid-cols-3 gap-3 mb-3">
-            {/* Favorites */}
             <div className="flex flex-col items-center p-2 bg-red-50 rounded-lg">
               <FavoriteIcon className="text-red-500 mb-1" fontSize="small" />
               <span className="text-xs text-gray-600 mb-0.5">
@@ -155,8 +239,6 @@ const ListingBox = ({
                 {data?.favorites_count || 0}
               </span>
             </div>
-
-            {/* Downloads */}
             <div className="flex flex-col items-center p-2 bg-blue-50 rounded-lg">
               <DownloadIcon className="text-blue-500 mb-1" fontSize="small" />
               <span className="text-xs text-gray-600 mb-0.5">
@@ -166,8 +248,6 @@ const ListingBox = ({
                 {data?.downloads_count || 0}
               </span>
             </div>
-
-            {/* Views */}
             <div className="flex flex-col items-center p-2 bg-purple-50 rounded-lg">
               <VisibilityIcon
                 className="text-purple-500 mb-1"
@@ -181,8 +261,6 @@ const ListingBox = ({
               </span>
             </div>
           </div>
-
-          {/* Additional Info */}
           <div className="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-100">
             <span className="capitalize">
               {t("listing.type")}:{" "}
@@ -198,11 +276,10 @@ const ListingBox = ({
         </div>
       </div>
 
-      {/* Challenge Selection Modal */}
+      {/* ── Challenge Selection Modal ── */}
       {showChallengeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
           <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col">
-            {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div>
                 <h3 className="text-xl font-semibold text-gray-900">
@@ -220,11 +297,16 @@ const ListingBox = ({
               </button>
             </div>
 
-            {/* Modal Content */}
             <div className="flex-1 overflow-y-auto p-6">
+              {challengeError && (
+                <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+                  {challengeError}
+                </div>
+              )}
+
               {challengeLoading ? (
                 <div className="flex items-center justify-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
                 </div>
               ) : challenges && challenges.length > 0 ? (
                 <div className="space-y-3">
@@ -232,11 +314,11 @@ const ListingBox = ({
                     <button
                       key={challenge.id}
                       onClick={() => handleSelectChallenge(challenge)}
-                      className="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all group"
+                      disabled={challengeSubmitting}
+                      className="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="flex items-start gap-4">
-                        {/* Challenge Image */}
-                        <div className="w-20 h-20 flex-shrink-0 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg overflow-hidden">
+                        <div className="w-20 h-20 shrink-0 bg-linear-to-br from-blue-100 to-purple-100 rounded-lg overflow-hidden">
                           {challenge.media && challenge.media.length > 0 ? (
                             <img
                               src={
@@ -255,8 +337,6 @@ const ListingBox = ({
                             </div>
                           )}
                         </div>
-
-                        {/* Challenge Info */}
                         <div className="flex-1 min-w-0">
                           <h4 className="font-semibold text-start text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
                             {challenge.title}
@@ -265,19 +345,17 @@ const ListingBox = ({
                             {challenge.short_description}
                           </p>
                           <div className="flex items-center gap-4 text-xs text-gray-500">
-                            <span className="flex items-center gap-1">
-                              <span className="font-medium text-orange-600">
-                                {getDaysLeftString(
-                                  t,
-                                  challenge?.days_left ?? 0,
-                                )}
-                              </span>
+                            <span className="font-medium text-orange-600">
+                              {getDaysLeftString(t, challenge?.days_left ?? 0)}
                             </span>
                             {challenge.participants && (
                               <span>{challenge.participants.description}</span>
                             )}
                           </div>
                         </div>
+                        {challengeSubmitting && (
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 self-center flex-shrink-0" />
+                        )}
                       </div>
                     </button>
                   ))}
@@ -298,11 +376,66 @@ const ListingBox = ({
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* ── Cancel Confirmation Modal ── */}
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                  <BlockIcon className="text-orange-600" fontSize="medium" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {t("listing.cancel_post")}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {t("listing.action_cannot_be_undone")}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6">
+              <p className="text-gray-700" dir="rtl">
+                {t("listing.are_you_sure")}{" "}
+                <span className="font-semibold">"{data?.title}"</span>{" "}
+                {t("listing.cancel_confirmation")}
+              </p>
+              {cancelError && (
+                <p className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                  {cancelError}
+                </p>
+              )}
+            </div>
+
+            <div className="p-6 border-t border-gray-200 flex gap-3 justify-end">
+              <button
+                onClick={() => setShowCancelModal(false)}
+                disabled={cancelLoading}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                {t("listing.cancel")}
+              </button>
+              <button
+                onClick={handleConfirmCancel}
+                disabled={cancelLoading}
+                className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+              >
+                {cancelLoading && (
+                  <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                )}
+                {t("listing.confirm_cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Delete Confirmation Modal ── */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
-            {/* Modal Header */}
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
@@ -318,28 +451,34 @@ const ListingBox = ({
                 </div>
               </div>
             </div>
-
-            {/* Modal Content */}
             <div className="p-6">
-              <p className="text-gray-700 " dir="rtl">
+              <p className="text-gray-700" dir="rtl">
                 {t("listing.are_you_sure")}{" "}
                 <span className="font-semibold">"{data?.title}"</span>{" "}
                 {t("listing.delete_confirmation")}
               </p>
+              {deleteError && (
+                <p className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                  {deleteError}
+                </p>
+              )}
             </div>
-
-            {/* Modal Footer */}
             <div className="p-6 border-t border-gray-200 flex gap-3 justify-end">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                disabled={deleteLoading}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
               >
                 {t("listing.cancel")}
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                disabled={deleteLoading}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-2"
               >
+                {deleteLoading && (
+                  <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                )}
                 {t("listing.delete")}
               </button>
             </div>

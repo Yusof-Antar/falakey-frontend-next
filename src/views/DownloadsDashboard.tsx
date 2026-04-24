@@ -1,6 +1,8 @@
-'use client';
+"use client";
+export const dynamic = "force-dynamic";
+
 import { useDownloadHook } from "@/helper/downloadHook";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -38,7 +40,8 @@ const DownloadsDashboard = () => {
         {t("download.empty_title") || "No Downloads Yet"}
       </h3>
       <p className="text-gray-500 max-w-md">
-        {t("download.empty_description") || "Your downloaded items will appear here"}
+        {t("download.empty_description") ||
+          "Your downloaded items will appear here"}
       </p>
     </div>
   );
@@ -57,7 +60,8 @@ const DownloadsDashboard = () => {
             </h1>
           </div>
           <p className="text-gray-600 text-sm sm:text-base ml-14">
-            {t("download.subtitle") || "Manage and access all your downloaded content"}
+            {t("download.subtitle") ||
+              "Manage and access all your downloaded content"}
           </p>
         </div>
 
@@ -67,7 +71,10 @@ const DownloadsDashboard = () => {
             <div className="flex items-center gap-2">
               <Image className="w-5 h-5 text-gray-600" />
               <span className="text-gray-700 font-medium">
-                {data.length} {data.length === 1 ? t("download.item") || "item" : t("download.items") || "items"}
+                {data.length}{" "}
+                {data.length === 1
+                  ? t("download.item") || "item"
+                  : t("download.items") || "items"}
               </span>
             </div>
           </div>
@@ -94,13 +101,15 @@ const DownloadsDashboard = () => {
                     alt={download.title}
                     loading="lazy"
                   />
-                  
+
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                       <div className="flex items-center gap-2 text-white text-sm">
                         <Search className="w-4 h-4" />
-                        <span>{t("download.view_details") || "View Details"}</span>
+                        <span>
+                          {t("download.view_details") || "View Details"}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -118,7 +127,7 @@ const DownloadsDashboard = () => {
                   <h3 className="font-semibold text-gray-800 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
                     {download.title}
                   </h3>
-                  
+
                   {download.description && (
                     <p className="text-sm text-gray-500 mt-1 line-clamp-1">
                       {download.description}

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 import { useState } from "react";
 import axios from "axios";
 import { login } from "@/lib/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { User } from "@/models/user";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 
 export const useAuthenticationHook = () => {
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ export const useAuthenticationHook = () => {
     u: string,
     p: string,
     pc: string,
-    t: boolean
+    t: boolean,
   ) => {
     setLoading(true);
     setError(null);
@@ -49,7 +49,7 @@ export const useAuthenticationHook = () => {
           headers: {
             Accept: "application/json",
           },
-        }
+        },
       );
 
       if (response.data["success"]) {
@@ -60,7 +60,7 @@ export const useAuthenticationHook = () => {
             user: response.data["data"]["user"],
             isLoggedIn: true,
             token: response.data["data"]["token"],
-          })
+          }),
         );
       } else {
         setError(response.data["message"]);
@@ -103,7 +103,7 @@ export const useAuthenticationHook = () => {
           headers: {
             Accept: "application/json",
           },
-        }
+        },
       );
 
       if (response.data["success"]) {
@@ -114,7 +114,7 @@ export const useAuthenticationHook = () => {
             user: response.data["data"]["user"],
             isLoggedIn: true,
             token: response.data["data"]["token"],
-          })
+          }),
         );
       } else {
         setError(response.data["message"]);
@@ -144,7 +144,7 @@ export const useAuthenticationHook = () => {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data["success"]) {
@@ -155,7 +155,7 @@ export const useAuthenticationHook = () => {
             user: response.data["data"]["user"],
             isLoggedIn: true,
             token: response.data["data"]["token"],
-          })
+          }),
         );
       } else {
         setError(response.data["message"]);

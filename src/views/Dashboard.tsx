@@ -1,4 +1,6 @@
 "use client";
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { faCaretRight, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,11 +13,12 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { BarChart } from "@mui/x-charts/BarChart";
 
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import { useDashboardHook } from "@/helper/dashboardHook";
 import { useEffect } from "react";
 import { Skeleton } from "@mui/material";
+import { useNavigateWithLocale } from "../helper/navigateWithLocale";
 
 const Dashboard = () => {
   const navigate = useNavigateWithLocale();

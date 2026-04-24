@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
     ],
   },
   typescript: { ignoreBuildErrors: true },
+  // Use standalone output
+  output: "standalone",
+  // Completely disable static generation
+  trailingSlash: true,
 };
 
 export default nextConfig;

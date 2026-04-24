@@ -1,4 +1,6 @@
 "use client";
+export const dynamic = "force-dynamic";
+
 import { useTrans } from "@/utils/translation";
 const logo = "/images/falakey-logo-old.svg";
 const banner = "/images/ai-banner.png";
@@ -9,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
 import { MenuItem, Select } from "@mui/material";
 import MasonryWrapper from "@/components/Masonry/MasonryWrapper";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { sortingVar } from "@/utils/defaultVariables";
 import SEO from "@/components/Common/SEO";
 import { apiRequest } from "@/utils/apiRequest";

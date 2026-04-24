@@ -8,7 +8,8 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 
 import AuthenticationModal from "../Authentication/AuthenticationModal";
-import UploadModal from "../UploadModal";
+import dynamic from "next/dynamic";
+const UploadModal = dynamic(() => import("../UploadModal"), { ssr: false });
 import CollectionsIcon from "@mui/icons-material/Collections";
 import SendIcon from "@mui/icons-material/Send";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -23,7 +24,7 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import FavoritesModal from "../FavoritesModal";
 
 const AdminNavbar = () => {

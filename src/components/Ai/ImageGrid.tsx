@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { apiRequest } from "@/utils/apiRequest";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -101,7 +101,7 @@ const ImageGrid = ({ images }: { images: string[] }) => {
             ) : (
               <a
                 href={`https://admin.falakey.com/files/download?url=${encodeURIComponent(
-                  i
+                  i,
                 )}`}
                 className="absolute top-3 left-3 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-[30%] aspect-square size-8 shadow-md transition flex items-center justify-center"
                 title="Download"
@@ -163,7 +163,7 @@ const ImageGrid = ({ images }: { images: string[] }) => {
             ) : (
               <a
                 href={`https://admin.falakey.com/files/download?url=${encodeURIComponent(
-                  zoomedImage
+                  zoomedImage,
                 )}`}
                 className="absolute top-3 left-3 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-[30%] aspect-square size-8 shadow-md transition flex items-center justify-center"
                 title="Download"

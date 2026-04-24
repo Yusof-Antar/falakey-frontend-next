@@ -1,11 +1,11 @@
-'use client';
+"use client";
 import { TextareaAutosize, Tooltip } from "@mui/material";
 import { Button } from "./ui/button";
 import ImageIcon from "@mui/icons-material/Image";
 import { useEffect, useState } from "react";
 import { useMessageHook } from "@/helper/messageHook";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 
 const MessageModal = ({

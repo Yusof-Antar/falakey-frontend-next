@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useEffect, useState } from "react";
 const user_def = "/icons/user-def.svg";
 import MessageModal from "../MessageModal";
@@ -6,7 +6,7 @@ import { User } from "@/models/user";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments } from "@fortawesome/free-regular-svg-icons";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import AuthenticationModal from "../Authentication/AuthenticationModal";
 import { useTrans } from "@/utils/translation";
 import { apiRequest } from "@/utils/apiRequest";
@@ -24,7 +24,7 @@ const AuthorHeader = ({
   const [followLoading, setFollowLoading] = useState(false); // ✅ Follow button loading state
 
   const { user, isLoggedIn, token } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const { t } = useTrans();
@@ -108,7 +108,7 @@ const AuthorHeader = ({
               <img
                 src={author?.avatar || user_def}
                 alt={`${author?.username || t("author.default")}${t(
-                  "author.profile_tag"
+                  "author.profile_tag",
                 )}`}
                 className={`object-cover ${
                   author?.avatar ? "w-full h-full" : "w-[20px] h-[auto]"
@@ -164,18 +164,19 @@ const AuthorHeader = ({
               </div>
             )}
             <div className="flex gap-2">
-
-            {(author?.social_media ?? []).map((link) => (
-              <a
-              key={link.platform}
-              href={link.value}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-700 text-2xl hover:text-[#44175b] transition"
-              >
-                <i className={`fa-brands fa-${link.platform.toLowerCase()}`} />
-              </a>
-            ))}
+              {(author?.social_media ?? []).map((link) => (
+                <a
+                  key={link.platform}
+                  href={link.value}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-700 text-2xl hover:text-[#44175b] transition"
+                >
+                  <i
+                    className={`fa-brands fa-${link.platform.toLowerCase()}`}
+                  />
+                </a>
+              ))}
             </div>
           </div>
         </div>

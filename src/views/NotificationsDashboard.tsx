@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 const user_def = "/icons/user-solid.svg";

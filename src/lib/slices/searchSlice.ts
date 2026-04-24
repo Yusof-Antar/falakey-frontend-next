@@ -1,9 +1,24 @@
-'use client';
+"use client";
 import { sortingVar } from "@/utils/defaultVariables";
 import { createSlice } from "@reduxjs/toolkit";
 
 // Function to extract URL parameters
 const getInitialStateFromURL = () => {
+  if (typeof window === "undefined") {
+    return {
+      types: "photo",
+      placeholder: "",
+      search: null,
+      filter: {
+        orientation: null,
+        size: null,
+        color: null,
+      },
+      sorting: sortingVar,
+      collection: null,
+      author: null,
+    };
+  }
   const params = new URLSearchParams(window.location.search);
 
   return {

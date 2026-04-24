@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { LeaderBoardUser } from "@/models/leaderBoardUser";
 import axios from "axios";
 import { useState } from "react";
@@ -17,7 +17,7 @@ export const useLeaderBoardHook = () => {
     take: number,
     page: number,
     type: string,
-    reset?: boolean
+    reset?: boolean,
   ) => {
     setLoading(true);
     setError(null); // Clear previous errors
@@ -30,7 +30,7 @@ export const useLeaderBoardHook = () => {
       const response = await axios.get(
         `${
           process.env.NEXT_PUBLIC_BASE_URL
-        }leaderboard?take=${take}&page=${page}&type=${type}&locale=${local}`
+        }leaderboard?take=${take}&page=${page}&type=${type}&locale=${local}`,
       );
 
       if (response.data["success"]) {
@@ -42,8 +42,8 @@ export const useLeaderBoardHook = () => {
               (item: LeaderBoardUser) =>
                 !prevData.some(
                   (existingItem) =>
-                    existingItem.author?.username === item.author?.username
-                )
+                    existingItem.author?.username === item.author?.username,
+                ),
             );
             return newData.length ? [...prevData, ...newData] : prevData;
           });

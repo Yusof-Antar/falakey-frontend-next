@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import AvailableForHire from "../Common/AvailableForHire";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import MasonryProfileModal from "./MasonryProfileModal";
 import React, { useEffect, useRef, useState } from "react";
 import MessageModal from "../MessageModal";

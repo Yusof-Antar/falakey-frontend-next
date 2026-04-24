@@ -1,7 +1,7 @@
-'use client';
+"use client";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import type { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 
 export const useNavigateWithLocale = () => {
   const router = useRouter();

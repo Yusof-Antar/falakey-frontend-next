@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { Post } from "@/models/post";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -31,7 +31,7 @@ export const useFetchPostDetail = (slug: string) => {
               Authorization: `Bearer ${token}`,
             },
             // signal: controller.signal,
-          }
+          },
         );
 
         if (response.data?.success) {
@@ -130,7 +130,7 @@ export const useMasonryPostHook = () => {
         {
           headers: { Authorization: `Bearer ${token}` },
           signal: controller.signal,
-        }
+        },
       );
 
       if (response.data?.success) {
@@ -167,8 +167,8 @@ export const useMasonryPostHook = () => {
                 ? post.favorites_count - 1
                 : post.favorites_count + 1,
             }
-          : post
-      )
+          : post,
+      ),
     );
   };
 
@@ -177,7 +177,7 @@ export const useMasonryPostHook = () => {
       prev.map((post) => ({
         ...post,
         is_favorite: false,
-      }))
+      })),
     );
   };
 
@@ -219,7 +219,7 @@ export const useFavoriteHook = () => {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
           },
-        }
+        },
       );
 
       if (response.data?.success) {
@@ -255,7 +255,7 @@ export const useFavoriteHook = () => {
  */
 export const toggleFavoritePost = async (
   id: number,
-  token: string
+  token: string,
 ): Promise<boolean> => {
   try {
     const response = await axios.post(
@@ -266,7 +266,7 @@ export const toggleFavoritePost = async (
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
-      }
+      },
     );
 
     return response.data?.success || false;
@@ -293,7 +293,7 @@ export const getFileTemp = async (file: File, token: string) => {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
-      }
+      },
     );
 
     if (response.data.success) {
@@ -321,7 +321,7 @@ export const getFileTemp = async (file: File, token: string) => {
 export const purchasePost = async (
   postId: string,
   credits: number,
-  token: string
+  token: string,
 ) => {
   const locale = Cookies.get("locale") || "ar";
   try {
@@ -336,10 +336,9 @@ export const purchasePost = async (
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     console.log(response);
-    
   } catch (error) {
     console.log("Error: ", error);
   }

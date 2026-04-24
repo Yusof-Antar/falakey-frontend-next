@@ -11,7 +11,7 @@ import NotificationImportantIcon from "@mui/icons-material/NotificationImportant
 
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/lib/slices/authSlice";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import LanguageSelector from "../LanguageSelector";
 import { Coins } from "lucide-react";

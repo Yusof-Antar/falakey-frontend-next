@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { Filter } from "@/models/filter";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -26,7 +26,7 @@ export const useFetchFilter = (stringFiltering: string) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (response.data["success"]) {

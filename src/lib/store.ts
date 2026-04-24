@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice, { login, logout } from "./slices/authSlice";
 import searchSlice from "./slices/searchSlice";
@@ -59,57 +59,88 @@ const loadState = () => {
   return { ...authState, translation: { local: finalLocale, dir: finalDir } };
 };
 
-const store = configureStore({
-  reducer: { auth: authSlice, search: searchSlice, translation: transSlice },
-  preloadedState: isClient ? loadState() : {
-    auth: { user: null, isLoggedIn: false, token: null },
-    translation: { local: FALLBACK_LOCALE, dir: "rtl" },
-  },
-});
+// Create store lazily - only on client side
+let storeInstance: any = null;
 
-const saveAuthStateToCookies = (state: RootState) => {
-  Cookies.set("user", JSON.stringify(state.auth), { expires: 7 });
-};
+const createStore = () => {
+  if (storeInstance) return storeInstance;
 
-let currentAuth = store.getState().auth;
-let currentLocale = store.getState().translation.local;
-let currentDir = store.getState().translation.dir;
+  storeInstance = configureStore({
+    reducer: { auth: authSlice, search: searchSlice, translation: transSlice },
+    preloadedState: isClient
+      ? loadState()
+      : {
+          auth: { user: null, isLoggedIn: false, token: null },
+          translation: { local: FALLBACK_LOCALE, dir: "rtl" },
+        },
+  });
 
-store.subscribe(() => {
-  const prevAuth = currentAuth;
-  const prevLocale = currentLocale;
-  const state = store.getState();
-  currentAuth = state.auth;
-  currentLocale = state.translation.local;
-  currentDir = state.translation.dir;
-  if (prevAuth !== currentAuth) saveAuthStateToCookies(state);
-  if (prevLocale !== currentLocale) {
-    saveLocaleToCookies(currentLocale, currentDir);
-    ensureLocaleInUrl(currentLocale);
-  }
-});
+  const saveAuthStateToCookies = (state: RootState) => {
+    Cookies.set("user", JSON.stringify(state.auth), { expires: 7 });
+  };
 
-const verifyToken = async () => {
-  const token = store.getState().auth.token;
-  if (!token) return;
-  try {
-    const result = await apiRequest({ method: "GET", url: "users/profile/private", token });
-    if (result["success"]) {
-      store.dispatch(login({ user: result["data"]["data"], isLoggedIn: true, token }));
-      Cookies.set("user", JSON.stringify({ user: result["data"]["data"], isLoggedIn: true, token }), { expires: 7 });
-    } else {
-      store.dispatch(logout());
-      Cookies.remove("user");
-      if (isClient) window.location.href = `/${store.getState().translation.local}`;
+  let currentAuth = storeInstance.getState().auth;
+  let currentLocale = storeInstance.getState().translation.local;
+  let currentDir = storeInstance.getState().translation.dir;
+
+  storeInstance.subscribe(() => {
+    const prevAuth = currentAuth;
+    const prevLocale = currentLocale;
+    const state = storeInstance.getState();
+    currentAuth = state.auth;
+    currentLocale = state.translation.local;
+    currentDir = state.translation.dir;
+    if (prevAuth !== currentAuth) saveAuthStateToCookies(state);
+    if (prevLocale !== currentLocale) {
+      saveLocaleToCookies(currentLocale, currentDir);
+      ensureLocaleInUrl(currentLocale);
     }
-  } catch {
-    store.dispatch(logout());
-    Cookies.remove("user");
-    if (isClient) window.location.href = `/${store.getState().translation.local}`;
-  }
+  });
+
+  const verifyToken = async () => {
+    const token = storeInstance.getState().auth.token;
+    if (!token) return;
+    try {
+      const result = await apiRequest({
+        method: "GET",
+        url: "users/profile/private",
+        token,
+      });
+      if (result["success"]) {
+        storeInstance.dispatch(
+          login({ user: result["data"]["data"], isLoggedIn: true, token }),
+        );
+        Cookies.set(
+          "user",
+          JSON.stringify({
+            user: result["data"]["data"],
+            isLoggedIn: true,
+            token,
+          }),
+          { expires: 7 },
+        );
+      } else {
+        storeInstance.dispatch(logout());
+        Cookies.remove("user");
+        if (isClient)
+          window.location.href = `/${storeInstance.getState().translation.local}`;
+      }
+    } catch {
+      storeInstance.dispatch(logout());
+      Cookies.remove("user");
+      if (isClient)
+        window.location.href = `/${storeInstance.getState().translation.local}`;
+    }
+  };
+
+  if (isClient) verifyToken();
+
+  return storeInstance;
 };
 
-if (isClient) verifyToken();
+// Export a getter function instead of the store directly
+const getStore = () => createStore();
 
-export type RootState = ReturnType<typeof store.getState>;
-export default store;
+export default getStore;
+
+export type { RootState } from "@/types/RootState";

@@ -1,9 +1,12 @@
 "use client";
+export const dynamic = "force-dynamic";
+
 // src/GoogleCallback.js
 
 import { login } from "@/lib/slices/authSlice";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
+import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

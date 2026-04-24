@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import AuthenticationModal from "../Authentication/AuthenticationModal";
-import UploadModal from "../UploadModal";
+import dynamic from "next/dynamic";
+const UploadModal = dynamic(() => import("../UploadModal"), { ssr: false });
 import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
 const SecondaryNavbar = ({ color }: { color?: string }) => {
   const navigate = useNavigateWithLocale();

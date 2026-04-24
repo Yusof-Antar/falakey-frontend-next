@@ -6,7 +6,7 @@ import { StarIcon } from "@radix-ui/react-icons";
 import { DownloadData, Post } from "@/models/post";
 import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import DownloadButton from "./DownloadButton";
 import AuthenticationModal from "../Authentication/AuthenticationModal";
 import { apiRequest } from "@/utils/apiRequest";

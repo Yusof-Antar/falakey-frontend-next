@@ -6,7 +6,7 @@ import { useTrans } from "@/utils/translation";
 import { getDaysLeftString } from "@/utils/getDaysLeftString";
 
 const PastChallengeCard = ({ challenge }: { challenge: Challenge }) => {
-  const { t } = useTrans();
+  const { t, local } = useTrans();
 
   return (
     <div className="flex lg:flex-row flex-col max-lg:items-center md:gap-16 gap-6 max-w-[1100px] w-[98%] lg:min-h-[320px] h-full mx-3 my-8 ">
@@ -87,7 +87,7 @@ const PastChallengeCard = ({ challenge }: { challenge: Challenge }) => {
         ) : null}
         <a
           className="bg-[#f7f7f7] flex items-center justify-center py-3 px-2 hover:bg-[#f7f7f7] rounded-sm font-semibold text-lg w-full h-full max-h-[50px]"
-          href={`/challenge/${challenge.slug}`}
+          href={`/${local}/challenge/${challenge.slug}`}
         >
           {t("challenge.learn_more")}
         </a>

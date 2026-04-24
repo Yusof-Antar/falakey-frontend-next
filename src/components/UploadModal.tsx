@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Button } from "./ui/button";
 const uploadImg = "/images/upload-modal.svg";
 const uploadAdd = "/icons/upload-add.svg";
@@ -8,7 +8,7 @@ import { Tag } from "@/models/tag";
 import { Collection } from "@/models/collection";
 import { getFileTemp } from "@/helper/postHook";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { UploadParam } from "@/models/uploadParam";
 import confetti from "canvas-confetti";
 import { useUploadHook } from "@/helper/uploadHook";
@@ -38,7 +38,7 @@ const UploadModal = ({
 
   // ⭐️ NEW LOGIC: Check if ANY item in uploadData has loading: true
   const isAnyImageLoading = uploadData.some(
-    (data) => data.img?.loading === true
+    (data) => data.img?.loading === true,
   );
 
   // ⭐️ NEW LOGIC: Overall condition for disabling the Submit button
@@ -115,7 +115,7 @@ const UploadModal = ({
           file: File,
           width: number,
           height: number,
-          thumbnail?: File // now storing a File object
+          thumbnail?: File, // now storing a File object
         ) => {
           setUploadData((prevFiles: UploadParam[]) => [
             ...prevFiles,
@@ -164,7 +164,7 @@ const UploadModal = ({
                   const thumbnailFile = new File(
                     [thumbnailBlob],
                     `thumbnail-${file.name}.jpg`,
-                    { type: "image/jpeg" }
+                    { type: "image/jpeg" },
                   );
 
                   // Pass thumbnail File into updateUploadData
@@ -194,12 +194,12 @@ const UploadModal = ({
                           loading: false, // ⭐️ Set loading to false on success
                         },
                       }
-                    : uploadFile
-                )
+                    : uploadFile,
+                ),
               );
             } else {
               setUploadData((prevFiles: UploadParam[]) =>
-                prevFiles.filter((uploadFile) => uploadFile.img!.file !== file)
+                prevFiles.filter((uploadFile) => uploadFile.img!.file !== file),
               );
 
               Swal.fire({
@@ -212,7 +212,7 @@ const UploadModal = ({
           })
           .catch(() => {
             setUploadData((prevFiles: UploadParam[]) =>
-              prevFiles.filter((uploadFile) => uploadFile.img!.file !== file)
+              prevFiles.filter((uploadFile) => uploadFile.img!.file !== file),
             );
 
             Swal.fire({
@@ -278,64 +278,64 @@ const UploadModal = ({
   const handleLockChange = (id: number, locked: boolean) => {
     setUploadData((prevData) =>
       prevData.map((data) =>
-        data.id === id ? { ...data, isLocked: locked ? true : false } : data
-      )
+        data.id === id ? { ...data, isLocked: locked ? true : false } : data,
+      ),
     );
   };
   const handlePremiumChange = (id: number, premium: boolean) => {
     setUploadData((prevData) =>
       prevData.map((data) =>
-        data.id === id ? { ...data, isPremium: premium ? true : false } : data
-      )
+        data.id === id ? { ...data, isPremium: premium ? true : false } : data,
+      ),
     );
   };
   const handleTitleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    id: number,
   ) => {
     const newTitle = e.target.value;
 
     setUploadData((prevData) =>
       prevData.map((data) =>
-        data.id === id ? { ...data, title: newTitle } : data
-      )
+        data.id === id ? { ...data, title: newTitle } : data,
+      ),
     );
   };
 
   const handleLocationChange = (
     id: number,
-    location: { name?: string; long?: string; lag?: string }
+    location: { name?: string; long?: string; lag?: string },
   ) => {
     setUploadData((prevData) =>
       prevData.map((data) =>
-        data.id === id ? { ...data, location: location } : data
-      )
+        data.id === id ? { ...data, location: location } : data,
+      ),
     );
   };
 
   const handleTagsChanges = (id: number, tags: Tag[]) => {
     setUploadData((prevData) =>
-      prevData.map((data) => (data.id === id ? { ...data, tags: tags } : data))
+      prevData.map((data) => (data.id === id ? { ...data, tags: tags } : data)),
     );
   };
   const handleCollectionsChanges = (id: number, collections: Collection[]) => {
     setUploadData((prevData) =>
       prevData.map((data) =>
-        data.id === id ? { ...data, collections: collections } : data
-      )
+        data.id === id ? { ...data, collections: collections } : data,
+      ),
     );
   };
 
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-    id: number
+    id: number,
   ) => {
     const newDescription = e.target.value;
 
     setUploadData((prevData) =>
       prevData.map((data) =>
-        data.id === id ? { ...data, description: newDescription } : data
-      )
+        data.id === id ? { ...data, description: newDescription } : data,
+      ),
     );
   };
 

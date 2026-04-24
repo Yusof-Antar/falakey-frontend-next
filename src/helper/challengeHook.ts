@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { Challenge } from "@/models/challenge";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ export const useFetchChallengeDetail = (slug: string) => {
   const [data, setData] = useState<Challenge>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { local } = useSelector((state: RootState) => state.translation);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export const useFetchChallengeDetail = (slug: string) => {
       setError(null);
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}challenges/show/${slug}?locale=${local}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}challenges/show/${slug}?locale=${local}`,
         );
 
         if (response.data["success"]) {
@@ -47,14 +47,13 @@ export const useFetchChallenge = () => {
 
   const { local } = useSelector((state: RootState) => state.translation);
 
-
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
       setError(null);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}challenges?locale=${local}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}challenges?locale=${local}`,
         );
 
         if (!response.ok) {

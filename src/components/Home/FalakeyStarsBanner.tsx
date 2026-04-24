@@ -5,7 +5,7 @@ const unkownProfile = "/images/unkown-profile.png";
 import { LeaderBoardUser } from "@/models/leaderBoardUser";
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useNavigateWithLocale } from "@/src/helper/navigateWithLocale";
 
 const FalakeyStarsBanner = ({

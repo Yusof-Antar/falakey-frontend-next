@@ -6,7 +6,7 @@ const unkownProfile = "/images/unkown-profile.png";
 const starIcon = "/icons/star-icon.svg";
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { ChevronLeft, ChevronRight } from "lucide-react"; // only right arrow
 import { useNavigateWithLocale } from "@/helper/navigateWithLocale";
 

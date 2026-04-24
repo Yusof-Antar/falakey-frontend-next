@@ -1,10 +1,10 @@
-'use client';
-import Link from 'next/link';
+"use client";
+import Link from "next/link";
 // const leftStar = "/images/left-stars.gif";
 
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { Challenge } from "@/models/challenge";
 import { getDaysLeftString } from "@/utils/getDaysLeftString";
 // ** Import React hooks
@@ -20,7 +20,7 @@ const ExploreChallengesBanner = ({ challenge }: { challenge: Challenge }) => {
   // ** Use the array of media URLs from the challenge object **
   // Assuming challenge.media is an array of objects, and each has an 'original' property (string)
   const imageSources: string[] = challenge.media.map(
-    (mediaItem) => mediaItem.original || mediaItem.thumb || mediaItem.sm
+    (mediaItem) => mediaItem.original || mediaItem.thumb || mediaItem.sm,
   );
   const totalImages = imageSources.length;
 

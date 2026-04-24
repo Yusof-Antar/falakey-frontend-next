@@ -7,7 +7,7 @@ import SearchInput from "../SearchInput";
 
 import { useTrans } from "@/utils/translation";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 // import { Collection } from "@/models/collection";
 // import { search } from "@/lib/slices/searchSlice";
 

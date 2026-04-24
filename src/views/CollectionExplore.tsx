@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 
 import { useParams, useSearchParams } from "next/navigation";
 import ExploreInputs from "@/components/Explore/ExploreInputs";
@@ -6,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParamsHook } from "@/helper/searchHook";
 import { search } from "@/lib/slices/searchSlice";
 import SEO from "@/components/Common/SEO";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import { useTrans } from "@/utils/translation";
 import MasonryWrapper from "@/components/Masonry/MasonryWrapper";
 import { useEffect, useMemo } from "react";

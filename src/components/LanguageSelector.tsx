@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { change } from "@/lib/slices/transSlice";
 import { FaGlobe } from "react-icons/fa";
-import { RootState } from "@/lib/store";
+import type { RootState } from "@/types/RootState";
 import {
   Dialog,
   DialogContent,
@@ -45,7 +45,7 @@ const LanguageSelector = () => {
       change({
         local: value,
         dir: value === "ar" ? "rtl" : "ltr",
-      })
+      }),
     );
     setOpen(false);
   };

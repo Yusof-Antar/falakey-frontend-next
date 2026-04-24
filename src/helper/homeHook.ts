@@ -1,5 +1,5 @@
-'use client';
-import { RootState } from "@/lib/store";
+"use client";
+import type { RootState } from "@/types/RootState";
 import { HomeData } from "@/models/homeData";
 import axios from "axios";
 import { useState } from "react";
@@ -19,7 +19,6 @@ export const useHomeHook = () => {
       );
 
       if (response.data["success"]) {
-
         setData(response.data["data"]);
       }
     } catch (error) {
