@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import dynamicComponent from "next/dynamic";
+import Author from "@/src/views/Author";
 import { fetchAuthorMeta } from "@/lib/fetchMetadata";
 
 export const dynamic = "force-dynamic";
-
-const Author = dynamicComponent(() => import("@/src/views/Author"), {
-  ssr: false,
-});
 
 export async function generateMetadata({
   params,
@@ -17,15 +13,12 @@ export async function generateMetadata({
   const rawUsername = decodeURIComponent(username).replace(/^@+/, "");
   const user = await fetchAuthorMeta(rawUsername);
 
-  if (!user) {
-    return { title: `@${rawUsername} | Falakey` };
-  }
+  if (!user) return { title: `@${rawUsername} | Falakey` };
 
   const displayName = user.display_name || `@${rawUsername}`;
   const title = `${displayName} (@${rawUsername})`;
   const description =
-    user.bio ||
-    `View ${displayName}'s profile and portfolio on Falakey.`;
+    user.bio || `View ${displayName}'s profile and portfolio on Falakey.`;
   const image = user.avatar;
   const resolvedLocale = locale === "ar" ? "ar_AR" : "en_US";
 

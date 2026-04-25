@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
-import dynamicComponent from "next/dynamic";
+import AiChat from "@/src/views/AiChat";
 
 export const dynamic = "force-dynamic";
-
-const AiChat = dynamicComponent(() => import("@/src/views/AiChat"), {
-  ssr: false,
-});
 
 export const metadata: Metadata = {
   title: "Falakey AI Generator | توليد الصور بالذكاء الاصطناعي",

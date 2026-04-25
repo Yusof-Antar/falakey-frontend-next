@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
-import dynamicComponent from "next/dynamic";
+import PictureDetail from "@/src/views/PictureDetail";
 import { fetchPostMeta } from "@/lib/fetchMetadata";
 
 export const dynamic = "force-dynamic";
-
-const PictureDetail = dynamicComponent(
-  () => import("@/src/views/PictureDetail"),
-  { ssr: false },
-);
 
 export async function generateMetadata({
   params,
@@ -17,9 +12,7 @@ export async function generateMetadata({
   const { picture, locale } = await params;
   const post = await fetchPostMeta(picture);
 
-  if (!post) {
-    return { title: "Listing | Falakey" };
-  }
+  if (!post) return { title: "Listing | Falakey" };
 
   const title = post.title || "Listing";
   const description =

@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
-import dynamicComponent from "next/dynamic";
+import AiGallery from "@/src/views/AiGallery";
 
 export const dynamic = "force-dynamic";
-
-const AiGallery = dynamicComponent(() => import("@/src/views/AiGallery"), {
-  ssr: false,
-});
 
 export const metadata: Metadata = {
   title: "Falakey AI | معرض الذكاء الاصطناعي",
