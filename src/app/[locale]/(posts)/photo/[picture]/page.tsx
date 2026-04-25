@@ -10,9 +10,17 @@ export async function generateMetadata({
   params: Promise<{ picture: string; locale: string }>;
 }): Promise<Metadata> {
   const { picture, locale } = await params;
-  const post = await fetchPostMeta(picture);
+  const post = await fetchPostMeta(picture, locale);
 
-  if (!post) return { title: "Photo | Falakey" };
+  const fallbackImage = "/icons/star-icon.svg";
+
+  if (!post) {
+    return {
+      title: "Photo",
+      openGraph: { images: [{ url: fallbackImage }] },
+      twitter: { card: "summary_large_image", images: [fallbackImage] },
+    };
+  }
 
   const title = post.title || "Photo";
   const description =
@@ -22,8 +30,8 @@ export async function generateMetadata({
   const image =
     post.preview_links?.md ||
     post.preview_links?.sm ||
-    post.preview_links?.thumb;
-  const resolvedLocale = locale === "ar" ? "ar_AR" : "en_US";
+    post.preview_links?.thumb ||
+    fallbackImage;
 
   return {
     title,
@@ -33,17 +41,15 @@ export async function generateMetadata({
       title,
       description,
       siteName: "Falakey",
-      locale: resolvedLocale,
-      ...(image && {
-        images: [{ url: image, width: 1200, height: 630, alt: title }],
-      }),
+      locale: locale === "ar" ? "ar_AR" : "en_US",
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
       site: "@falakey",
-      ...(image && { images: [image] }),
+      images: [image],
     },
   };
 }

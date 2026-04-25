@@ -2,11 +2,11 @@ const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL ||
   "https://admin.falakey.com/api/v1/";
 
-export async function fetchPostMeta(slug: string) {
+export async function fetchPostMeta(slug: string, locale = "ar") {
   try {
     const res = await fetch(
-      `${BASE_URL}posts/show/${slug}?locale=ar`,
-      { next: { revalidate: 60 } },
+      `${BASE_URL}posts/show/${slug}?locale=${locale}`,
+      { cache: "no-store" },
     );
     if (!res.ok) return null;
     const json = await res.json();
@@ -16,11 +16,11 @@ export async function fetchPostMeta(slug: string) {
   }
 }
 
-export async function fetchChallengeMeta(slug: string) {
+export async function fetchChallengeMeta(slug: string, locale = "ar") {
   try {
     const res = await fetch(
-      `${BASE_URL}challenges/show/${slug}?locale=ar`,
-      { next: { revalidate: 60 } },
+      `${BASE_URL}challenges/show/${slug}?locale=${locale}`,
+      { cache: "no-store" },
     );
     if (!res.ok) return null;
     const json = await res.json();
@@ -30,11 +30,11 @@ export async function fetchChallengeMeta(slug: string) {
   }
 }
 
-export async function fetchAuthorMeta(username: string) {
+export async function fetchAuthorMeta(username: string, locale = "ar") {
   try {
     const res = await fetch(
-      `${BASE_URL}users/${username}/profile/public?locale=ar`,
-      { next: { revalidate: 60 } },
+      `${BASE_URL}users/${username}/profile/public?locale=${locale}`,
+      { cache: "no-store" },
     );
     if (!res.ok) return null;
     const json = await res.json();

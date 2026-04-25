@@ -11,16 +11,23 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { username, locale } = await params;
   const rawUsername = decodeURIComponent(username).replace(/^@+/, "");
-  const user = await fetchAuthorMeta(rawUsername);
+  const user = await fetchAuthorMeta(rawUsername, locale);
 
-  if (!user) return { title: `@${rawUsername} | Falakey` };
+  const fallbackImage = "/icons/star-icon.svg";
+
+  if (!user) {
+    return {
+      title: `@${rawUsername}`,
+      openGraph: { images: [{ url: fallbackImage }] },
+      twitter: { card: "summary", images: [fallbackImage] },
+    };
+  }
 
   const displayName = user.display_name || `@${rawUsername}`;
   const title = `${displayName} (@${rawUsername})`;
   const description =
     user.bio || `View ${displayName}'s profile and portfolio on Falakey.`;
-  const image = user.avatar;
-  const resolvedLocale = locale === "ar" ? "ar_AR" : "en_US";
+  const image = user.avatar || fallbackImage;
 
   return {
     title,
@@ -30,17 +37,15 @@ export async function generateMetadata({
       title,
       description,
       siteName: "Falakey",
-      locale: resolvedLocale,
-      ...(image && {
-        images: [{ url: image, width: 400, height: 400, alt: displayName }],
-      }),
+      locale: locale === "ar" ? "ar_AR" : "en_US",
+      images: [{ url: image, width: 400, height: 400, alt: displayName }],
     },
     twitter: {
       card: "summary",
       title,
       description,
       site: "@falakey",
-      ...(image && { images: [image] }),
+      images: [image],
     },
   };
 }

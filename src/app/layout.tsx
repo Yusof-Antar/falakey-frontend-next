@@ -6,8 +6,13 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://falakey.com";
-const DEFAULT_IMAGE = `${SITE_URL}/icons/star-icon.svg`;
+// VERCEL_URL is auto-set by Vercel on every deployment (no https://)
+// NEXT_PUBLIC_SITE_URL can be set manually for custom domains
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://falakey.com");
+
+const DEFAULT_OG_IMAGE = `${SITE_URL}/icons/star-icon.svg`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -26,9 +31,7 @@ export const metadata: Metadata = {
     "Arab creativity",
     "إبداع عربي",
     "photography challenges",
-    "تحديات تصوير",
     "vectors",
-    "فيكتور",
   ],
   openGraph: {
     type: "website",
@@ -36,7 +39,7 @@ export const metadata: Metadata = {
     title: "Falakey | إبداع رقمي عربي",
     description:
       "اكتشف صورًا مجانية عالية الجودة وتحديات إبداعية في التصوير الفوتوغرافي.",
-    images: [{ url: DEFAULT_IMAGE, width: 512, height: 512, alt: "Falakey" }],
+    images: [{ url: DEFAULT_OG_IMAGE, width: 512, height: 512, alt: "Falakey" }],
     locale: "ar_AR",
   },
   twitter: {
@@ -45,7 +48,7 @@ export const metadata: Metadata = {
     title: "Falakey | إبداع رقمي عربي",
     description:
       "اكتشف صورًا مجانية عالية الجودة وتحديات إبداعية في التصوير الفوتوغرافي.",
-    images: [DEFAULT_IMAGE],
+    images: [DEFAULT_OG_IMAGE],
   },
   icons: {
     icon: "/star-icon.svg",

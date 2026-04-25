@@ -10,10 +10,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { slug, locale } = await params;
-  const challenge = await fetchChallengeMeta(slug);
+  const challenge = await fetchChallengeMeta(slug, locale);
+
+  const fallbackImage = "/icons/star-icon.svg";
 
   if (!challenge) {
-    return { title: "Challenge | Falakey" };
+    return {
+      title: "Challenge",
+      openGraph: { images: [{ url: fallbackImage }] },
+      twitter: { card: "summary_large_image", images: [fallbackImage] },
+    };
   }
 
   const title = challenge.title || "Challenge";
@@ -24,8 +30,8 @@ export async function generateMetadata({
   const image =
     challenge.media?.[0]?.original ||
     challenge.media?.[0]?.sm ||
-    challenge.media?.[0]?.thumb;
-  const resolvedLocale = locale === "ar" ? "ar_AR" : "en_US";
+    challenge.media?.[0]?.thumb ||
+    fallbackImage;
 
   return {
     title,
@@ -35,17 +41,15 @@ export async function generateMetadata({
       title,
       description,
       siteName: "Falakey",
-      locale: resolvedLocale,
-      ...(image && {
-        images: [{ url: image, width: 1200, height: 630, alt: title }],
-      }),
+      locale: locale === "ar" ? "ar_AR" : "en_US",
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
       site: "@falakey",
-      ...(image && { images: [image] }),
+      images: [image],
     },
   };
 }
