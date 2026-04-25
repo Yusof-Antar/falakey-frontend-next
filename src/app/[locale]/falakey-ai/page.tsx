@@ -1,10 +1,39 @@
-"use client";
-export const dynamic = "force-dynamic";
-
+import type { Metadata } from "next";
 import dynamicComponent from "next/dynamic";
+
+export const dynamic = "force-dynamic";
 
 const AiGallery = dynamicComponent(() => import("@/src/views/AiGallery"), {
   ssr: false,
 });
+
+export const metadata: Metadata = {
+  title: "Falakey AI | معرض الذكاء الاصطناعي",
+  description:
+    "استعرض صور مولَّدة بالذكاء الاصطناعي من مجتمع فلكي الإبداعي. Browse AI-generated images created by the Falakey creative community.",
+  openGraph: {
+    type: "website",
+    title: "Falakey AI | معرض الذكاء الاصطناعي",
+    description:
+      "استعرض صور مولَّدة بالذكاء الاصطناعي من مجتمع فلكي الإبداعي.",
+    siteName: "Falakey",
+    images: [
+      {
+        url: "/images/ai-banner.png",
+        width: 1200,
+        height: 630,
+        alt: "Falakey AI Gallery",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Falakey AI | معرض الذكاء الاصطناعي",
+    description:
+      "استعرض صور مولَّدة بالذكاء الاصطناعي من مجتمع فلكي الإبداعي.",
+    site: "@falakey",
+    images: ["/images/ai-banner.png"],
+  },
+};
 
 export default AiGallery;

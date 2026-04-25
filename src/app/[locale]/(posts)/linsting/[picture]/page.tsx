@@ -1,11 +1,58 @@
-"use client";
-export const dynamic = "force-dynamic";
-
+import type { Metadata } from "next";
 import dynamicComponent from "next/dynamic";
+import { fetchPostMeta } from "@/lib/fetchMetadata";
+
+export const dynamic = "force-dynamic";
 
 const PictureDetail = dynamicComponent(
   () => import("@/src/views/PictureDetail"),
   { ssr: false },
 );
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ picture: string; locale: string }>;
+}): Promise<Metadata> {
+  const { picture, locale } = await params;
+  const post = await fetchPostMeta(picture);
+
+  if (!post) {
+    return { title: "Listing | Falakey" };
+  }
+
+  const title = post.title || "Listing";
+  const description =
+    post.description ||
+    post.short_description ||
+    "View this listing on Falakey — free high-quality creative content.";
+  const image =
+    post.preview_links?.md ||
+    post.preview_links?.sm ||
+    post.preview_links?.thumb;
+  const resolvedLocale = locale === "ar" ? "ar_AR" : "en_US";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      siteName: "Falakey",
+      locale: resolvedLocale,
+      ...(image && {
+        images: [{ url: image, width: 1200, height: 630, alt: title }],
+      }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      site: "@falakey",
+      ...(image && { images: [image] }),
+    },
+  };
+}
 
 export default PictureDetail;
