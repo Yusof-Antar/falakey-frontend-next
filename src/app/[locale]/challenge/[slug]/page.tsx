@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ChallengeDetails from "@/components/Challenge/ChallengeDetails";
-import { fetchChallengeMeta } from "@/lib/fetchMetadata";
+import { fetchChallengeMeta, pickChallengeImage } from "@/lib/fetchMetadata";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +27,7 @@ export async function generateMetadata({
     challenge.short_description ||
     challenge.description ||
     "Join this creative photography challenge on Falakey.";
-  const image =
-    challenge.media?.[0]?.original ||
-    challenge.media?.[0]?.sm ||
-    challenge.media?.[0]?.thumb ||
-    fallbackImage;
+  const image = pickChallengeImage(challenge) || fallbackImage;
 
   return {
     title,
@@ -42,7 +38,7 @@ export async function generateMetadata({
       description,
       siteName: "Falakey",
       locale: locale === "ar" ? "ar_AR" : "en_US",
-      images: [{ url: image, width: 1200, height: 630, alt: title }],
+      images: [{ url: image, alt: title }],
     },
     twitter: {
       card: "summary_large_image",

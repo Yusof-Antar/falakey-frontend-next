@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PictureDetail from "@/src/views/PictureDetail";
-import { fetchPostMeta } from "@/lib/fetchMetadata";
+import { fetchPostMeta, pickPostImage } from "@/lib/fetchMetadata";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +27,7 @@ export async function generateMetadata({
     post.description ||
     post.short_description ||
     "Discover this photo on Falakey — free high-quality stock images.";
-  const image =
-    post.preview_links?.md ||
-    post.preview_links?.sm ||
-    post.preview_links?.thumb ||
-    fallbackImage;
+  const image = pickPostImage(post) || fallbackImage;
 
   return {
     title,
@@ -42,7 +38,7 @@ export async function generateMetadata({
       description,
       siteName: "Falakey",
       locale: locale === "ar" ? "ar_AR" : "en_US",
-      images: [{ url: image, width: 1200, height: 630, alt: title }],
+      images: [{ url: image, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
