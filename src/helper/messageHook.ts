@@ -23,20 +23,16 @@ export const useMessageHook = () => {
     try {
       const response = await axios.get(
         process.env.NEXT_PUBLIC_BASE_URL +
-          `chats/messages/${peerId}${
-            postId != null ? `/${postId}` : ""
-          }?locale=${local}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+          `chats/messages/${peerId}${postId != null ? `/${postId}` : ""}?locale=${local}`,
+        { headers: { Authorization: `Bearer ${token}` } },
       );
-      if (response.data["success"]) {
-        setMessages(response.data["data"]);
+      if (response.data.success) {
+        setMessages(response.data.data);
       } else {
-        setError(response.data["message"]);
+        setError(response.data.message);
       }
+    } catch (err) {
+      setError((err as Error).message || "Failed to load messages");
     } finally {
       setLoading(false);
     }
@@ -48,31 +44,36 @@ export const useMessageHook = () => {
     postId: number | undefined,
   ) => {
     setError("");
-    try {
-      const newMessage = {
-        id: 12,
-        created_at: "now",
-        is_read: false,
-        sender: user,
-        message: message,
-      } as Message;
-      setMessages((prevMessage) => [newMessage, ...prevMessage]);
+    const tempId = -Date.now();
+    const optimisticMessage = {
+      id: tempId,
+      created_at: new Date().toISOString(),
+      is_read: false,
+      sender: user,
+      message,
+    } as Message;
 
-      await axios.post(
+    setMessages((prev) => [optimisticMessage, ...prev]);
+
+    try {
+      const response = await axios.post(
         process.env.NEXT_PUBLIC_BASE_URL + `chats/send?locale=${local}`,
-        {
-          receiver_id: receiverId,
-          post_id: postId,
-          message: message,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        { receiver_id: receiverId, post_id: postId, message },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
+
+      if (response.data?.success) {
+        const realMessage: Message = response.data.data;
+        setMessages((prev) =>
+          prev.map((m) => (m.id === tempId ? realMessage : m)),
+        );
+      } else {
+        setMessages((prev) => prev.filter((m) => m.id !== tempId));
+        setError("Failed to send message.");
+      }
     } catch {
-      setError("Error Happend While Sending the Message");
+      setMessages((prev) => prev.filter((m) => m.id !== tempId));
+      setError("Error happened while sending the message.");
     }
   };
 

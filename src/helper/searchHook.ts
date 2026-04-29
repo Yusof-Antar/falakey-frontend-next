@@ -1,6 +1,6 @@
 "use client";
 import { useSelector } from "react-redux";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import type { RootState } from "@/types/RootState";
 
 export const useSearchParamsHook = () => {
@@ -24,13 +24,15 @@ export const useSearchParamsHook = () => {
     if (sorting) params.sorting = sorting;
     if (collection) params.collection = collection;
 
-    const currentPath = window.location.pathname;
-    const queryString = new URLSearchParams(params).toString();
-    const newUrl = `${currentPath}?${queryString}`;
-
-    window.history.pushState(null, "", newUrl);
-    return queryString;
+    return new URLSearchParams(params).toString();
   }, [searchState]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const currentPath = window.location.pathname;
+    const newUrl = `${currentPath}?${stringFiltering}`;
+    window.history.pushState(null, "", newUrl);
+  }, [stringFiltering]);
 
   return stringFiltering;
 };

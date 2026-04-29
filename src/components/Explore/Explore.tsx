@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import ExploreInputs from "./ExploreInputs";
 import { useDispatch, useSelector } from "react-redux";
 import { search } from "@/lib/slices/searchSlice";
@@ -13,36 +14,32 @@ import { sortingExploreVar } from "@/utils/defaultVariables";
 const Explore = () => {
   const dispatch = useDispatch();
   const stringFiltering = useSearchParamsHook();
-  const pathname = usePathname();
+  const urlSearchParams = useSearchParams();
   const previousearchData = useSelector((state: RootState) => state.search);
 
   useEffect(() => {
-    // Update the search state in Redux when necessary
-    const searchParams = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(urlSearchParams?.toString() || "");
 
     dispatch(
       search({
         ...previousearchData,
-        types: searchParams.get("types") ?? previousearchData.types,
-        search: searchParams.get("search") ?? previousearchData.search,
-        collection:
-          searchParams.get("collection") ?? previousearchData.collection,
+        types: params.get("types") ?? previousearchData.types,
+        search: params.get("search") ?? previousearchData.search,
+        collection: params.get("collection") ?? previousearchData.collection,
         filter: {
           orientation:
-            searchParams.get("orientation") ??
+            params.get("orientation") ??
             previousearchData.filter?.orientation ??
             null,
           size:
-            searchParams.get("size") ?? previousearchData.filter?.size ?? null,
+            params.get("size") ?? previousearchData.filter?.size ?? null,
           color:
-            searchParams.get("color") ??
-            previousearchData.filter?.color ??
-            null,
+            params.get("color") ?? previousearchData.filter?.color ?? null,
         },
-        sorting: searchParams.get("sorting") ?? sortingExploreVar,
+        sorting: params.get("sorting") ?? sortingExploreVar,
       }),
     );
-  }, [dispatch]);
+  }, [dispatch, urlSearchParams]);
 
   const { t } = useTrans();
 
@@ -55,7 +52,7 @@ const Explore = () => {
 
       <div className="header justify-center items-center flex flex-col flex-wrap">
         <div className="explore w-full max-w-screen-size px-4">
-          <div className="min-[1024px]:text-[70px] min-[319px]:text-[28px]  min-[425px]:text-[36px]  min-[768px]:text-[55px] font-bold mb-[16px]">
+          <div className="min-[1024px]:text-[70px] min-[319px]:text-[28px] min-[425px]:text-[36px] min-[768px]:text-[55px] font-bold mb-4">
             {t("explore.title")}
           </div>
 

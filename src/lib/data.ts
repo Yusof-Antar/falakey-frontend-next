@@ -24,22 +24,6 @@ export const categories = [
   { name: "Summer", key: "summer" },
   { name: "Architecture & Interiors", key: "architecture-interiors" },
   { name: "Street Photography", key: "street-photography" },
-  { name: "Wallpaper", key: "wallpaper" },
-  { name: "Health & Wellness", key: "health-wellness" },
-  { name: "Business & Work", key: "business-work" },
-  { name: "Textures & Patterns", key: "textures-patterns" },
-  { name: "Food", key: "food" },
-  { name: "Summer", key: "summer" },
-  { name: "Architecture & Interiors", key: "architecture-interiors" },
-  { name: "Street Photography", key: "street-photography" },
-  { name: "Wallpaper", key: "wallpaper" },
-  { name: "Health & Wellness", key: "health-wellness" },
-  { name: "Business & Work", key: "business-work" },
-  { name: "Textures & Patterns", key: "textures-patterns" },
-  { name: "Food", key: "food" },
-  { name: "Summer", key: "summer" },
-  { name: "Architecture & Interiors", key: "architecture-interiors" },
-  { name: "Street Photography", key: "street-photography" },
 ];
 
 export const tags: Tag[] = [

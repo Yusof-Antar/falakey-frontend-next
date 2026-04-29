@@ -25,13 +25,11 @@ export const useChatHook = () => {
           },
         },
       );
-      if (response.data["success"]) {
-        setChats(response.data["data"]["chats"]["list"]);
+      if (response.data.success) {
+        setChats(response.data.data.chats.list);
       }
-      return [];
-    } catch (error) {
-      console.log(error);
-      // setError(error);
+    } catch (err) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }

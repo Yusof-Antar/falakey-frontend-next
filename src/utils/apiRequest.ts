@@ -48,7 +48,7 @@ export const apiRequest = async ({
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  if (!isFormData && method !== "get") {
+  if (!isFormData && method.toString().toLowerCase() !== "get") {
     headers["Content-Type"] = "application/json";
   }
 

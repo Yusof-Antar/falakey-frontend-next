@@ -30,10 +30,6 @@ const MasonryCard = ({
 }) => {
   const [isFavorite, setIsFavorite] = useState(data.is_favorite ?? false);
 
-  useEffect(() => {
-    setIsFavorite(data.is_favorite ?? false);
-  }, [data.is_favorite]);
-
   const navigate = useNavigateWithLocale();
 
   const [isModalOpen, setModalOpen] = useState(false);

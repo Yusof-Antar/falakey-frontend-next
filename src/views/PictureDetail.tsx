@@ -2,7 +2,7 @@
 import PictureDetailHeader from "@/components/PictureDetail/PictureDetailHeader";
 import ProfileCard from "@/components/ProfileCard";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, usePathname } from "next/navigation";
 import MessageModal from "@/components/MessageModal";
 import { toggleFavoritePost, useFetchPostDetail } from "@/helper/postHook";
@@ -63,22 +63,20 @@ const PictureDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(0);
 
-  const [loaded, setLoaded] = useState(false);
+  const loaded = useRef(false);
   const { token, user } = useSelector((state: RootState) => state.auth);
 
-  // Validate type parameter
-
   useEffect(() => {
-    if (postDetail && !loaded) {
-      setIsFavorite(postDetail!.is_favorite ?? false);
-      setFavoriteCount(postDetail!.favorites_count ?? 0);
-      setSelectedQuality(postDetail!.download_data![0]);
+    if (postDetail && !loaded.current) {
+      setIsFavorite(postDetail.is_favorite ?? false);
+      setFavoriteCount(postDetail.favorites_count ?? 0);
+      setSelectedQuality(postDetail.download_data?.[0]);
       posthog.capture("post_view", {
-        id: postDetail?.id,
-        slug: postDetail?.slug,
+        id: postDetail.id,
+        slug: postDetail.slug,
         user_id: user?.id,
       });
-      setLoaded(true);
+      loaded.current = true;
     }
   }, [postDetail]);
 
@@ -153,12 +151,12 @@ const PictureDetail = () => {
                 }
               }}
             />
-            <div className="flex flex-col w-full lg:flex-row items-start gap-10 justify-center">
+            <div className="flex flex-col w-full lg:flex-row items-start gap-10 justify-center pt-4">
               <div className="w-full flex flex-col items-center flex-1">
                 {postDetail?.type === "video" ? (
                   <video
                     controls
-                    className="rounded-md w-full object-cover max-h-[500px]"
+                    className="rounded-md w-full object-cover max-h-125"
                     style={{
                       aspectRatio: `${postDetail?.aspect_ratio || 1}`,
                       maxWidth: `${(postDetail?.aspect_ratio || 1) * 500}px`,
@@ -174,7 +172,7 @@ const PictureDetail = () => {
                 ) : (
                   <img
                     className="rounded-md sm:w-full w-[95%] object-cover 
-                    max-h-[500px]"
+                    max-h-125"
                     style={{
                       aspectRatio: `${postDetail?.aspect_ratio || 1}`,
                       maxWidth: `${(postDetail?.aspect_ratio || 1) * 500}px`,
@@ -254,7 +252,7 @@ const PictureDetail = () => {
               </div>
             </div>
             <div className="w-full bg-white flex flex-col items-center">
-              <MasonryWrapper title="Related" screenWidth="w-[95%]" />
+              <MasonryWrapper title={t("post.related")} screenWidth="w-[95%]" />
             </div>
           </div>
         )}
@@ -268,7 +266,7 @@ const Spinner = () => (
   <div className="flex justify-center items-center h-[50vh]">
     <div className="flex justify-center items-center">
       <ImageIcon
-        className="text-gray-900 animate-pulse size-[100px]" // Fading animation
+        className="text-gray-900 animate-pulse size-25" // Fading animation
       />
     </div>
   </div>

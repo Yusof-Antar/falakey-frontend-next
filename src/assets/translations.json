@@ -179,12 +179,16 @@
       "add_to_challenge": "Add to Challenge",
       "select_challenge_to": "Select a challenge to add to",
       "no_active_challenge": "No active challenges available.",
-      "delete": "Delete Post",
+      "delete": "Delete",
+      "delete_post": "Delete Post",
       "cancel": "Cancel",
+      "cancel_post": "Cancel Post",
       "action_cannot_be_undone": "This action cannot be undone.",
       "are_you_sure": "Are you sure you want to delete",
       "delete_confirmation": "This will permanently remove the post and all associated data.",
-
+      "cancel_confirmation": "? This will cancel this submission.",
+      "confirm_cancel": "Confirm Cancel",
+      "something_went_wrong": "Something went wrong. Please try again.",
       "created": "Created ",
       "favorites": "Favorites",
       "downloads": "Downloads",
@@ -216,7 +220,9 @@
       "buy_credits": "Buy Credits",
       "purchase_success_title": "Purchase Successful",
       "purchase_success_message": "You've successfully unlocked this post!",
-      "locked_text": "This post is locked by the author and cannot be downloaded"
+      "locked_text": "This post is locked by the author and cannot be downloaded",
+      "download_options": "Download Options",
+      "related": "Related Posts"
     },
     "favorite_modal": {
       "my_favorites": "My Favorites",
@@ -611,12 +617,16 @@
       "add_to_challenge": "أضف إلى التحدي",
       "select_challenge_to": "اختر التحدي الذي ترغب في إضافته إلى ",
       "no_active_challenge": "لا توجد تحديات نشطة متاحة.",
-      "delete": "حذف المشاركة",
+      "delete": "حذف",
+      "delete_post": "حذف المشاركة",
       "cancel": "إلغاء",
+      "cancel_post": "إلغاء المشاركة",
       "action_cannot_be_undone": "لا يمكن التراجع عن هذا الإجراء.",
       "are_you_sure": "هل أنت متأكد أنك تريد حذف  ",
       "delete_confirmation": "؟ سيتم حذف هذه المشاركة نهائياً مع جميع البيانات المرتبطة بها.",
-
+      "cancel_confirmation": "؟ سيتم إلغاء هذه المشاركة.",
+      "confirm_cancel": "تأكيد الإلغاء",
+      "something_went_wrong": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
       "created": "تم الإنشاء في ",
       "favorites": "المفضلة",
       "downloads": "التنزيلات",
@@ -648,7 +658,9 @@
       "buy_credits": "شراء نقاط",
       "purchase_success_title": "تم الشراء بنجاح",
       "purchase_success_message": "لقد قمت بفتح هذه المشاركة بنجاح!",
-      "locked_text": "هذه المشاركة مقفلة من قبل المؤلف ولا يمكن تنزيلها"
+      "locked_text": "هذه المشاركة مقفلة من قبل المؤلف ولا يمكن تنزيلها",
+      "download_options": "خيارات التحميل",
+      "related": "مشاركات ذات صلة"
     },
     "favorite_modal": {
       "my_favorites": "مفضلتي",
@@ -792,7 +804,9 @@
       "draft": "مسودة",
       "pending": "قيد المراجعة",
       "filter": "تصفية",
-      "clear": "مسح الفلاتر"
+      "clear": "مسح الفلاتر",
+      "no_listing": "لا توجد قوائم.",
+      "clear_all": "مسح جميع الفلاتر"
     },
     "messages_dashboard": {
       "title": "الرسائل",

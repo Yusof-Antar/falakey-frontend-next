@@ -26,14 +26,14 @@ const DownloadCard = ({
   // The same card content as before
   const cardContent = (
     <div
-      className={`border p-4 sm:p-6 sm:rounded-xl md:w-[600px] w-full  shadow-lg bg-white ${
+      className={`border p-4 sm:p-6 sm:rounded-xl md:w-150 w-full shadow-lg bg-white ${
         post?.is_download_locked
           ? "opacity-50 pointer-events-none select-none"
           : ""
       }`}
     >
       <div className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">
-        Download Options
+        {t("post.download_options")}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
@@ -105,7 +105,7 @@ const DownloadCard = ({
         <div className="w-[95%]">
           <button
             onClick={() => setOpen(true)}
-            className="h-[45px] w-full px-2 gap-2 flex bg-[#b17ece] text-white rounded-md items-center justify-center"
+            className="h-11.25 w-full px-2 gap-2 flex bg-[#b17ece] text-white rounded-md items-center justify-center"
           >
             {post.is_download_locked ? (
               <>
@@ -143,7 +143,7 @@ const DownloadCard = ({
                 onClick={() => setOpen(false)}
                 className="text-gray-600 mb-4 block"
               >
-                Close
+                {t("common.close")}
               </button>
               {cardContent}
             </div>

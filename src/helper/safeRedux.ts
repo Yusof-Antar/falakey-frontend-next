@@ -1,57 +1,18 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/types/RootState";
-import { useEffect, useState } from "react";
 
-// Safe hook to use Redux state that works during SSR
-export const useSafeSelector = <T>(selector: (state: RootState) => T): T => {
-  try {
-    return useSelector(selector);
-  } catch (e) {
-    // Return undefined during SSR - the component should handle this
-    return undefined as unknown as T;
-  }
-};
+// Since all files that use these are "use client", there's no SSR risk.
+// These are thin wrappers kept for import compatibility.
 
-// Hook to get auth state safely
-export const useSafeAuth = () => {
-  const [authState, setAuthState] = useState({
-    user: null,
-    isLoggedIn: false,
-    token: null,
-  });
+export const useSafeSelector = <T>(selector: (state: RootState) => T): T =>
+  useSelector(selector);
 
-  try {
-    const state = useSelector((s: RootState) => s.auth);
-    useEffect(() => {
-      setAuthState(state);
-    }, [state]);
-  } catch (e) {
-    // SSR - use defaults
-  }
+export const useSafeAuth = () =>
+  useSelector((state: RootState) => state.auth);
 
-  return authState;
-};
+export const useSafeTranslation = () =>
+  useSelector((state: RootState) => state.translation);
 
-// Hook to get translation state safely
-export const useSafeTranslation = () => {
-  const [transState, setTransState] = useState({
-    local: "ar",
-    dir: "rtl",
-  });
-
-  try {
-    const state = useSelector((s: RootState) => s.translation);
-    useEffect(() => {
-      setTransState(state);
-    }, [state]);
-  } catch (e) {
-    // SSR - use defaults
-  }
-
-  return transState;
-};
-
-// Re-export useSelector and useDispatch for convenience
 export { useSelector, useDispatch };
 export type { RootState };

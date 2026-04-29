@@ -19,9 +19,7 @@ export const useFetchFilter = (stringFiltering: string) => {
       setError(null);
       try {
         const response = await axios.get(
-          `${
-            process.env.NEXT_PUBLIC_BASE_URL
-          }posts/filters?${stringFiltering}&locale=${local}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}posts/filters?${stringFiltering}&locale=${local}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -29,8 +27,8 @@ export const useFetchFilter = (stringFiltering: string) => {
           },
         );
 
-        if (response.data["success"]) {
-          setData(response.data["data"]);
+        if (response.data.success) {
+          setData(response.data.data);
         }
       } catch (err) {
         setError((err as Error).message);
@@ -40,7 +38,7 @@ export const useFetchFilter = (stringFiltering: string) => {
     };
 
     fetchPosts();
-  }, [stringFiltering, local]);
+  }, [stringFiltering, local, token]);
 
   return { data, loading, error };
 };

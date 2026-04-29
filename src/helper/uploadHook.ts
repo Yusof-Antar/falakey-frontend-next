@@ -122,7 +122,7 @@ export const useUploadHook = () => {
 
       for (let index = 0; index < uploadedData.length; index++) {
         const element = uploadedData[index];
-        filtering?.map((filter) => {
+        filtering?.forEach((filter) => {
           formData.append(`items[${index}][${filter.key}]`, filter?.value);
         });
         formData.append(`items[${index}][title]`, element.title ?? "");
@@ -148,14 +148,14 @@ export const useUploadHook = () => {
           element.location ? (element.location.long ?? "") : "",
         );
 
-        element.tags?.map((tag, tagIndex) => {
+        element.tags?.forEach((tag, tagIndex) => {
           formData.append(
             `items[${index}][tags][${tagIndex}]`,
             tag.id.toString(),
           );
         });
 
-        element.collections?.map((tag, collectionIndex) => {
+        element.collections?.forEach((tag, collectionIndex) => {
           formData.append(
             `items[${index}][collections][${collectionIndex}]`,
             tag.id.toString(),

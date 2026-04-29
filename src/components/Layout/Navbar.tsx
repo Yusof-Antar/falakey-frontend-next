@@ -10,7 +10,7 @@ import {
   // faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AuthenticationModal from "../Authentication/AuthenticationModal";
 // import MenuIcon from "@mui/icons-material/Menu";
 import dynamic from "next/dynamic";
@@ -70,6 +70,9 @@ const Navbar = () => {
 
   useEffect(() => {
     getHomeData();
+  }, []);
+
+  useEffect(() => {
     const isHomePage = ["/", "/en", "/ar"].includes(
       pathname.replace(/\/+$/, ""),
     );
@@ -97,19 +100,13 @@ const Navbar = () => {
     showMobileSearchModal,
   ]);
 
-  const handleSearchEvent = () => {
-    setSearchValue(
-      searchValue !== "" ? searchValue : (previousearchData.search ?? ""),
-    );
+  const handleSearchEvent = useCallback(() => {
+    const value = searchValue !== "" ? searchValue : (previousearchData.search ?? "");
+    setSearchValue(value);
     dispatch(
-      search({
-        ...previousearchData,
-        collection: null,
-        search:
-          searchValue !== "" ? searchValue : (previousearchData.search ?? ""),
-      }),
+      search({ ...previousearchData, collection: null, search: value }),
     );
-  };
+  }, [searchValue, previousearchData, dispatch]);
 
   useEffect(() => {
     if (!user && openUploadModal) {
@@ -184,9 +181,6 @@ const Navbar = () => {
             {/* Logo */}
             <a
               href={`/${local}?types=photo`}
-              onClick={() => {
-                window.location.reload();
-              }}
               className="flex-shrink-0 h-full flex items-center"
             >
               <Image
@@ -202,10 +196,18 @@ const Navbar = () => {
             {/* Desktop Layout */}
             <nav className="hidden lg:flex flex-1 items-center gap-6">
               {/* Search Bar */}
-              <div className="rounded-full bg-[#eeeeee] flex flex-1 gap-2 items-center px-4 h-[40px]">
+              <div className="rounded-full bg-custom-light-gray flex flex-1 gap-2 items-center px-4 h-10">
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
-                  className="text-[#767676]"
+                  className="text-[#767676] cursor-pointer"
+                  onClick={() => {
+                    handleSearchEvent();
+                    navigate(
+                      `/explore?types=${
+                        previousearchData.types ?? "photo"
+                      }&search=${encodeURIComponent(searchValue ?? "")}`,
+                    );
+                  }}
                 />
                 <input
                   type="search"
@@ -219,7 +221,7 @@ const Navbar = () => {
                     setSearchValue(e.target.value);
                   }}
                   onKeyDown={(e: any) => {
-                    if (e.key === "Enter" && searchValue!.trim() !== "") {
+                    if (e.key === "Enter") {
                       handleSearchEvent();
                       navigate(
                         `/explore?types=${
@@ -254,7 +256,7 @@ const Navbar = () => {
                 >
                   {t("navbar.pckg_price")}
                 </button>
-                <div className="h-[30px] w-[2px] bg-gray-300"></div>
+                <div className="h-7.5 w-0.5 bg-gray-300"></div>
                 <LanguageSelector />
 
                 {isLoggedIn ? (
@@ -285,7 +287,7 @@ const Navbar = () => {
                         setOpenDashboardModal((prev) => !prev);
                       }}
                     >
-                      <div className="bg-custom-gray rounded-full h-[30px] w-[30px] flex justify-center items-center">
+                      <div className="bg-custom-gray rounded-full h-7.5 w-7.5 flex justify-center items-center">
                         <img
                           src={user!.avatar}
                           alt={user?.display_name}
@@ -318,10 +320,18 @@ const Navbar = () => {
             {/* Mobile Layout - Falakey Style */}
             <nav className="flex lg:hidden flex-1 items-center justify-end gap-1 text-xl ">
               {/* Search Icon */}
-              <div className="rounded-full bg-[#eeeeee] flex flex-1 gap-2 items-center px-4 h-[40px]">
+              <div className="rounded-full bg-custom-light-gray flex flex-1 gap-2 items-center px-4 h-10">
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
-                  className="text-[#767676]"
+                  className="text-[#767676] cursor-pointer"
+                  onClick={() => {
+                    handleSearchEvent();
+                    navigate(
+                      `/explore?types=${
+                        previousearchData.types ?? "photo"
+                      }&search=${encodeURIComponent(searchValue ?? "")}`,
+                    );
+                  }}
                 />
                 <input
                   type="search"

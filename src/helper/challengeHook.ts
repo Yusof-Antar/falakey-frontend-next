@@ -21,8 +21,8 @@ export const useFetchChallengeDetail = (slug: string) => {
           `${process.env.NEXT_PUBLIC_BASE_URL}challenges/show/${slug}?locale=${local}`,
         );
 
-        if (response.data["success"]) {
-          setData(response.data["data"]);
+        if (response.data.success) {
+          setData(response.data.data);
         }
       } catch (err) {
         setError((err as Error).message);
@@ -32,7 +32,7 @@ export const useFetchChallengeDetail = (slug: string) => {
     };
 
     fetchPosts();
-  }, [slug]);
+  }, [slug, local]);
 
   return { data, loading, error };
 };
@@ -61,7 +61,7 @@ export const useFetchChallenge = () => {
         }
         const json = await response.json();
 
-        setData(json["data"]);
+        setData(json.data);
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -70,7 +70,7 @@ export const useFetchChallenge = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [local]);
 
   return { data, loading, error };
 };

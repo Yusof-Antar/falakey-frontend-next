@@ -6,9 +6,6 @@ import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-/**
- * Hook to fetch a single post by slug
- */
 export const useFetchPostDetail = (slug: string) => {
   const [data, setData] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,10 +24,8 @@ export const useFetchPostDetail = (slug: string) => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}posts/show/${slug}?locale=${local}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            // signal: controller.signal,
+            headers: { Authorization: `Bearer ${token}` },
+            signal: controller.signal,
           },
         );
 
@@ -48,10 +43,8 @@ export const useFetchPostDetail = (slug: string) => {
 
     fetchPost();
 
-    return () => {
-      controller.abort();
-    };
-  }, [slug, token]);
+    return () => controller.abort();
+  }, [slug, token, local]);
 
   return { data, loading, error };
 };
@@ -74,7 +67,6 @@ export const useMasonryPostHook = () => {
   const pageRef = useRef<number>(1);
 
   const fetchPosts = async (stringFiltering?: string) => {
-    // Abort previous request if needed
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -122,11 +114,10 @@ export const useMasonryPostHook = () => {
         }
       }
     }
+
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}posts?page=${
-          pageRef.current
-        }&take=10&${params.toString()}&locale=${local}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}posts?page=${pageRef.current}&take=10&${params.toString()}&locale=${local}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           signal: controller.signal,
@@ -196,9 +187,6 @@ export const useMasonryPostHook = () => {
   };
 };
 
-/**
- * Hook to manage user favorites
- */
 export const useFavoriteHook = () => {
   const [favorites, setFavorites] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -211,9 +199,7 @@ export const useFavoriteHook = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${
-          process.env.NEXT_PUBLIC_BASE_URL
-        }posts/my-favorites?page=1&locale=${local}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}posts/my-favorites?page=1&locale=${local}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -234,7 +220,6 @@ export const useFavoriteHook = () => {
 
   const removeFavorite = async (id: number) => {
     setLoading(true);
-
     try {
       const result = await toggleFavoritePost(id, token ?? "");
       if (result) {
@@ -250,9 +235,6 @@ export const useFavoriteHook = () => {
   return { fetchFavorites, removeFavorite, favorites, loading, error };
 };
 
-/**
- * Toggle favorite status of a post
- */
 export const toggleFavoritePost = async (
   id: number,
   token: string,
@@ -268,16 +250,12 @@ export const toggleFavoritePost = async (
         },
       },
     );
-
     return response.data?.success || false;
   } catch {
     return false;
   }
 };
 
-/**
- * Upload temp file
- */
 export const getFileTemp = async (file: File, token: string) => {
   const local = Cookies.get("locale") || "ar";
 
@@ -312,7 +290,7 @@ export const getFileTemp = async (file: File, token: string) => {
   } catch (error: any) {
     return {
       success: false,
-      message: error.response.data.message ?? "",
+      message: error?.response?.data?.message ?? "Upload failed.",
       temp_file_path: "",
     };
   }
@@ -322,24 +300,23 @@ export const purchasePost = async (
   postId: string,
   credits: number,
   token: string,
-) => {
+): Promise<{ success: boolean; message?: string }> => {
   const locale = Cookies.get("locale") || "ar";
   try {
-    const response = axios.post(
+    const response = await axios.post(
       process.env.NEXT_PUBLIC_BASE_URL +
         `monetization/posts/purchase?locale=${locale}`,
-      {
-        post_id: postId,
-        credits: credits,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      { post_id: postId, credits },
+      { headers: { Authorization: `Bearer ${token}` } },
     );
-    console.log(response);
-  } catch (error) {
-    console.log("Error: ", error);
+    return {
+      success: response.data?.success || false,
+      message: response.data?.message,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error?.response?.data?.message ?? "Purchase failed.",
+    };
   }
 };
